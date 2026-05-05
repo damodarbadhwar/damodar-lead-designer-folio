@@ -1,0 +1,51 @@
+---
+/**
+ * Site footer — social links + tagline.
+ *
+ * Variant aligns the footer's inner container to the page above it:
+ *  - "home" (default): max-w-[1540px], px-5 / md:px-[150px] — matches home + about section.
+ *  - "case-study":     max-w-[1280px], px-4 / md:px-[60px]  — matches case-study sections.
+ */
+type Variant = "home" | "case-study";
+interface Props {
+  variant?: Variant;
+}
+const { variant = "home" } = Astro.props;
+
+const containerClass =
+  variant === "case-study"
+    ? "mx-auto w-full max-w-[1280px] px-4 md:px-[60px]"
+    : "mx-auto w-full max-w-[1540px] px-5 md:px-[150px]";
+
+const links = [
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/damodarbadhwar/" },
+  { label: "Dribbble", href: "https://dribbble.com/meetdemo" },
+  { label: "Medium", href: "https://meetdemo.medium.com/" },
+];
+---
+
+<footer class="w-full bg-surface-2 py-6">
+  <div class:list={[containerClass, "flex flex-col items-center gap-4 md:flex-row md:items-center md:justify-between md:gap-0"]}>
+    <!-- Footer links -->
+    <ul class="flex flex-wrap items-center justify-center gap-2 md:gap-8">
+      {links.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            target="_blank"
+            rel="noopener"
+            class="inline-flex h-10 items-center gap-2 rounded-lg text-button font-medium text-ink-1 transition-colors duration-200 hover:bg-grey-200"
+          >
+            {link.label}
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M6 14 14 6 M7 6h7v7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class="text-center text-body text-ink-3 md:text-right">
+      Designed by judgement, coded using AI
+    </p>
+  </div>
+</footer>

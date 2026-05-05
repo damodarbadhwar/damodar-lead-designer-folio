@@ -1,0 +1,30 @@
+---
+/**
+ * NumberedItem — Figma "point-01" / list-item pattern.
+ *
+ * Numbered list item: 28px wide number column + content.
+ * Number is auto-padded to "01", "02", etc.
+ *
+ * Usage:
+ *   <NumberedItem n={1} title="Title">Body...</NumberedItem>
+ *   <NumberedItem n={2}>Body only, no title</NumberedItem>
+ */
+import TextBlock from "./TextBlock.astro";
+
+export interface Props {
+  n: number;
+  title?: string;
+}
+const { n, title } = Astro.props;
+const num = String(n).padStart(2, "0");
+---
+
+<div class="flex items-start gap-2">
+  <p class="w-7 shrink-0 font-sans font-semibold leading-[21px] text-[#909090] text-[20px]">
+    {num}
+  </p>
+  <div class="flex flex-1 flex-col gap-1">
+    {title && <TextBlock variant="body-semibold">{title}</TextBlock>}
+    <TextBlock variant="body"><slot /></TextBlock>
+  </div>
+</div>

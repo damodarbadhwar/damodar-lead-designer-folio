@@ -1,0 +1,21 @@
+---
+export interface Props {
+  name: string;
+  hex: string;
+  border?: boolean;
+  dark?: boolean;
+}
+const { name, hex, border = false, dark = false } = Astro.props;
+---
+
+<div
+  class:list={[
+    "rounded-lg p-4 text-xs font-medium",
+    border ? "border border-divider" : "",
+    dark ? "text-white" : "text-ink-2",
+  ]}
+  style={`background:${hex}`}
+>
+  <div class="font-semibold">{name}</div>
+  <div class="mt-1 opacity-70 font-mono">{hex}</div>
+</div>

@@ -1,0 +1,947 @@
+---
+/**
+ * Case study — Smart Start Banking.
+ * Pixel-perfect implementation of the Figma desktop (47:1705) + mobile designs.
+ *
+ * Layout follows the Figma container model:
+ *   - Outer container: max-w-[1400px] centered
+ *   - Mobile gutter: 16px (px-4) — matches Figma 393px frame
+ *   - Desktop gutter: 60px (md:px-[60px]) — matches Figma 1280px frame
+ *   - Two-column body sections: 280px label column + 32px gap + flex-1 content
+ *
+ * Section spacing rhythm — matches Figma section frame heights exactly:
+ *   - Title:                pb-14 (56px)
+ *   - Summary:              pb-14 (56px)
+ *   - Hero:                 pb-14 (56px)
+ *   - Overview:             pb-[72px]
+ *   - Internal alignment:   pb-10 (40px) — short separator before next section
+ *   - Comp study insights:  pb-6  (24px) — flows directly into table
+ *   - Comp study table:     pb-[72px]
+ *   - Refined brief:        pb-[72px]
+ *   - My role text:         pb-10 (40px)
+ *   - My role image:        pb-[72px]
+ *   - Process intro:        pb-10 (40px)
+ *   - Process plan:         pb-[72px]
+ *   - Persona title:        pb-10 (40px)
+ *   - Persona container:    pb-[72px]
+ *   - Key wins title:       pb-10 (40px)
+ *   - Each Win row:         pb-14 (56px)
+ *   - Pushback title:       pb-10 (40px)
+ *   - Each Pushback row:    pb-14 (56px) — last one pb-[72px]
+ *   - Success metrics:      pb-[72px]
+ *   - End of project:       py-10 (40px)
+ *   - Next read:            py-[72px]
+ *
+ * All copy uses the <TextBlock> component (variant prop) so typography
+ * stays in sync with the Figma "Text block" component.
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Nav from "../../components/Nav.astro";
+import FadeIn from "../../components/FadeIn.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+import TextBlock from "../../components/TextBlock.astro";
+import MetaData from "../../components/MetaData.astro";
+import NumberedItem from "../../components/NumberedItem.astro";
+
+// — Page meta —
+const summary = [
+  { label: "ROLE", value: "Lead designer" },
+  { label: "TIMELINE", value: "Sep 25 – Dec 25" },
+  { label: "PLATFORM", value: "iOS, Android and web" },
+];
+
+// — Competitive study — key findings
+const keyFindings = [
+  "The 6–12 segment was completely unserved by Wells Fargo. No digital product existed for this age group.",
+  "Ages 13-17 were already partially served by Clear Access Banking (CAB) — an account that could only be opened at a branch. Launching a new High School Checking product would directly cannibalize CAB portfolio instead of strengthening it.",
+  "3 players partners with Greenlight to power the kid's experience, which became our partner too",
+];
+
+// — Refined brief
+const briefIntents = [
+  {
+    title: "Expand the user base",
+    body: "Opportunity to serve ~6 million kids in existing households, building a pipeline of future primary banking customers.",
+  },
+  {
+    title: "Higher deposits and retention",
+    body: "Parents with kids keep 32% higher balances. Parents also show 20% higher usage vs without kids",
+  },
+];
+
+// — Process workshop rows
+const processRows = [
+  {
+    label: "Discovery",
+    palette: "cyan",
+    cols: [
+      {
+        title: "Pre-read",
+        items: [
+          "Take a look at the FigJam board going over the problem, persona and competitive benchmarks",
+          "Note down your questions",
+        ],
+        outcome: "Effective use of everyone's time",
+      },
+      {
+        title: "Working session 1",
+        items: [
+          "Intros",
+          "Workshop schedule",
+          "Problem space (15 min)",
+          "User empathy (30 min)",
+          "Competitive benchmarks (15 min)",
+          "Q&A (30 min)",
+        ],
+        duration: "(1.5–2 hrs)",
+        outcome: "Shared agreement on assignment",
+      },
+      {
+        title: "Working session 2",
+        items: [
+          "Answer any questions the team may have",
+          "Assign the user journey and design manager mapping",
+          "Discuss the project timeline",
+        ],
+        duration: "(30 mins)",
+        outcome: "Ownership and timeline expectations",
+      },
+    ],
+  },
+  {
+    label: "Craft & review",
+    palette: "orange",
+    cols: [
+      {
+        title: "Craft",
+        items: ["Explorations", "Crits", "Refinements"],
+      },
+      {
+        title: "Reviews",
+        items: [
+          "Leadership reviews",
+          "Accessibility review",
+          "Design system review",
+          "Feedback reconciliation",
+          "Refinements",
+        ],
+      },
+    ],
+  },
+  {
+    label: "Handoff",
+    palette: "green",
+    cols: [
+      {
+        items: [
+          "Responsive breakpoints",
+          "Presentation to engineering team",
+        ],
+      },
+    ],
+  },
+];
+
+const palettes = {
+  cyan: {
+    goalBg: "bg-[#b2ebf2]",
+    cellBg: "bg-[#e0f7fa]",
+    border: "border-[#4dd0e1]",
+    title: "text-[#0092ca]",
+    outcomeBg: "bg-[#b2ebf2]",
+  },
+  orange: {
+    goalBg: "bg-[#fdf7c8]",
+    cellBg: "bg-[#fefce9]",
+    border: "border-[#f6e155]",
+    title: "text-[#e38035]",
+    outcomeBg: "bg-[#fdf7c8]",
+  },
+  green: {
+    goalBg: "bg-[#dcedc8]",
+    cellBg: "bg-[#f1f8e9]",
+    border: "border-[#aed581]",
+    title: "text-[#558b2f]",
+    outcomeBg: "bg-[#dcedc8]",
+  },
+} as const;
+
+// — Persona content
+const personaCards = [
+  {
+    label: "Motivations",
+    sections: [
+      {
+        person: "Mark",
+        items: [
+          "Doesn't want to set dozens of settings just to get started.",
+          "Worried about the bank account being too complex for Ethan.",
+        ],
+      },
+      {
+        person: "Ethan",
+        items: [
+          "Gets confused when things aren't explained clearly.",
+          "Loses interest if the experience feels boring or overly restrictive.",
+        ],
+      },
+    ],
+  },
+  {
+    label: "Needs / Expectations",
+    sections: [
+      {
+        person: "Mark",
+        items: [
+          "Quick and easy.",
+          "Limits and clear visibility so he doesn't have to “police” usage.",
+        ],
+      },
+      {
+        person: "Ethan",
+        items: [
+          "Avoid jargons such as “Routing number”.",
+          "Visual feedback (how much left & spent).",
+          "A sense of ownership: this is my account.",
+        ],
+      },
+    ],
+  },
+  {
+    label: "Pain Points",
+    sections: [
+      {
+        person: "Mark",
+        items: [
+          "Too many settings to configure",
+          "Worried product may be complex for Ethan",
+        ],
+      },
+      {
+        person: "Ethan",
+        items: [
+          "Confusing explanations",
+          "Boring or restrictive experiences",
+        ],
+      },
+    ],
+  },
+  {
+    label: "Opportunities",
+    sections: [
+      {
+        person: null,
+        items: [
+          "First card, first save: make it feel special.",
+          "Enable safe exploration with parental visibility",
+          "Provide strong defaults",
+          "Use age-appropriate language",
+        ],
+      },
+    ],
+  },
+];
+
+// — Key wins (each entry is a side-by-side proposal: before → after)
+// Each mockup slot accepts either { img: "..." } OR { video: "/path.webm" }.
+// If `video` is set, an autoplay/muted/loop video element renders instead of <img>.
+const keyWins = [
+  {
+    // pp = pre-populate / pre-fill flow
+    before: { video: "/case-studies/smart-start-banking/pp-before.webm", caption: "Experience from a different user flow" },
+    after: { video: "/case-studies/smart-start-banking/pp-after.webm", caption: "Improved design" },
+    features: [
+      {
+        title: "Making a long form feel short",
+        body: "Since we could pre-fill about 15 out of 21 fields, I proposed having a compact read-only component in replacement of standard input fields. This cut the page length by 29%.",
+      },
+      {
+        title: "Better communication on pre-fill",
+        body: "I proposed having a small message on how the bank has reduced user's efforts.",
+      },
+    ],
+  },
+  {
+    // tnc = terms & conditions / legal disclosures
+    before: { video: "/case-studies/smart-start-banking/tnc-before.webm", caption: "Experience from a different user flow" },
+    after: { video: "/case-studies/smart-start-banking/tnc-after.webm", caption: "Improved design" },
+    features: [
+      {
+        title: "Turning three legal pages into one tap",
+        body: "Legal required three separate disclosure pages, each with its own “Agree” button. Since rejecting any single disclosure terminates the application, three separate consents add fatigue. I proposed expandable sections with one CTA. Legal team was happy.",
+      },
+    ],
+  },
+];
+
+// — Rejected proposals
+const rejectedProposals = [
+  {
+    before: { img: "/case-studies/smart-start-banking/rejected-1-before.jpg", caption: "Proposed" },
+    after: { img: "/case-studies/smart-start-banking/rejected-1-after.jpg", caption: "Finalized" },
+    feature: {
+      title: "Sign on fields instead of CTA",
+      body: "I proposed to have user name and password fields within the first page for faster movement.",
+    },
+    conversation: [
+      { speaker: "STAKEHOLDERS", quote: "We can't do that because other products don't use this pattern" },
+      { speaker: "ME", quote: "But homepage uses this pattern and we could change this on other areas too" },
+      { speaker: "STAKEHOLDERS", quote: "No, this is a large effort for auth team which we can't really influence." },
+    ],
+  },
+];
+
+// — Competitive table — column headers (logo + product name)
+const compColumns = [
+  { logo: "/case-studies/smart-start-banking/competetive-wells.jpg", name: "Clear Access Banking" },
+  { logo: "/case-studies/smart-start-banking/competetive-capital-one.jpg", name: "Money Teen Checking" },
+  { logo: "/case-studies/smart-start-banking/competetive-chase.jpg", name: "First Banking" },
+  { logo: "/case-studies/smart-start-banking/competetive-us-bank.jpg", name: "U.S Bank" },
+  { logo: "/case-studies/smart-start-banking/competetive-BOA.jpg", name: "SafeBalance®" },
+  { logo: "/case-studies/smart-start-banking/competetive-Revolut.jpg", name: "Revolut <18" },
+  { logo: "/case-studies/smart-start-banking/competetive-Greenlight.jpg", name: "Greenlight Direct" },
+];
+
+// — Competitive table — feature rows. "yes" / "no" render as tick / cross icons.
+const compRows: Array<{ feature: string; cells: string[] }> = [
+  { feature: "Price",               cells: ["Free", "Free", "Free", "Free", "Free", "Free", "$5–15 / month"] },
+  { feature: "Qualifying age",      cells: ["13+", "8+", "6–17", "1+", "6+", "6–17", "1+"] },
+  { feature: "Customers",           cells: ["675k (ages 13–17)", "–", "~3M+", "–", "–", "–", "~6M+"] },
+  { feature: "Ownership",           cells: ["13–16 years need adult co-owner", "Joint", "Parent", "Parent", "Parent", "Child-owned, parent linked", "Parent"] },
+  { feature: "Digital opening",     cells: ["no", "yes", "yes", "yes", "yes", "yes", "yes"] },
+  { feature: "Branch opening",      cells: ["yes", "no", "yes", "no", "Not disclosed", "no", "no"] },
+  { feature: "Spending controls",   cells: ["no", "no", "yes", "yes", "yes", "yes", "yes"] },
+  { feature: "Real-time alerts",    cells: ["no", "yes", "yes", "yes", "yes", "yes", "yes"] },
+  { feature: "Money movement",      cells: ["no", "yes", "–", "yes", "yes", "yes", "yes"] },
+  { feature: "Financial education", cells: ["no", "yes", "yes", "yes", "yes", "yes", "yes"] },
+  { feature: "Graduation",          cells: ["NA", "Manual", "Manual", "Manual", "Manual", "Child focused only", "Child focused only"] },
+  { feature: "Launch date",         cells: ["Aug 2020", "2020", "Oct 2020", "Jun 2024", "Dec 2024", "2025", "Jan 2017"] },
+];
+
+// — Success metrics
+const successMetrics = [
+  { label: "Acquisition target", value: "1 million+ accounts", note: "within the first year of launch" },
+  { label: "Kid's Retention", value: "Min 20%", note: "of the kids should use one of the adult's banking product after the age of 24" },
+  { label: "Conversion delta", value: "+100–300 bps", note: "improvement in funnel conversion" },
+];
+---
+
+<BaseLayout
+  title="Smart Start Banking — Damodar Badhwar"
+  description="A digital-first bank account for kids ages 6–17. Wells Fargo case study."
+>
+  <!-- Top container: 24px above nav, then nav, then 56px gap before title -->
+  <div class="mx-auto w-full max-w-[1400px] px-4 pt-6 md:px-[60px]">
+    <Nav />
+  </div>
+
+  <article>
+    <!-- Top of page through "Core user" sits inside a 1280px container.
+         Sections below (Persona container, Key wins, etc.) get the wider 1400px. -->
+    <div class="mx-auto w-full max-w-[1280px]">
+
+    <!-- ─────────── Title (Figma 49:2819) ─────────── -->
+    <!-- pt-14 (56px) gap below nav, pb-14 (56px) below H1, px-4 / md:px-[60px] gutter -->
+    <FadeIn>
+      <header class="px-4 pt-14 pb-14 md:px-[60px]">
+        <h1
+          class="block w-full font-serif font-medium text-ink-3 leading-[1.2] text-[32px] tracking-[-0.64px] md:text-[56px] md:tracking-[-1.12px]"
+        >
+          Smart Start Banking: A digital-first bank account for kids
+        </h1>
+      </header>
+    </FadeIn>
+
+    <!-- ─────────── Summary metadata (Figma 47:1708 — pb 56) ─────────── -->
+    <FadeIn delay={80}>
+      <section class="px-4 pb-14 md:px-[60px]">
+        <div class="flex flex-wrap gap-x-8 gap-y-5 md:gap-x-16">
+          {summary.map((item) => (
+            <MetaData label={item.label} value={item.value} />
+          ))}
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Hero image (Figma 47:1712 — pb 56) ─────────── -->
+    <FadeIn delay={120}>
+      <section class="px-4 pb-14 md:px-[60px]">
+        <div class="overflow-hidden rounded-2xl bg-grey-200 aspect-[1160/434]">
+          <img
+            src="/case-studies/smart-start-banking/hero.jpg"
+            alt="Smart Start Banking case study cover"
+            class="h-full w-full object-cover"
+            loading="eager"
+          />
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Overview (Figma 47:1713 — pb 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">Overview</TextBlock>
+          </div>
+          <div class="md:flex-1">
+            <TextBlock variant="body-lg">
+              We're looking at the behind the scenes of designing a no-fee account for kids ages 6–17, opened and supervised by their parent. The core motivation for a parent is to watch their kid learn and practice the basics of money management.
+            </TextBlock>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Internal alignment (Figma 47:1716 — pb 40) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-10 md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">Internal alignment</TextBlock>
+          </div>
+          <div class="md:flex-1 flex flex-col gap-2">
+            <TextBlock variant="body-medium">
+              Business team came with two product proposals. Research narrowed it to one!
+            </TextBlock>
+            <TextBlock variant="body">
+              Biz team wanted two products: Smart Start Banking for ages 6–17, and High School Checking for ages 17–24. The combined goal was to acquire ~9 million youths.
+            </TextBlock>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Competitive study insights (Figma 47:1719 — pb 24) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-6 md:px-[60px]">
+        <div class="rounded-2xl bg-surface-2 p-6 flex flex-col gap-4">
+          <TextBlock variant="body">
+            I studied the market landscape and three things became clear:
+          </TextBlock>
+          {keyFindings.map((finding, i) => (
+            <NumberedItem n={i + 1}>{finding}</NumberedItem>
+          ))}
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Competitive study table (Figma 47:1723 — pb 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="-mx-4 md:mx-0 overflow-x-auto">
+          <div class="px-4 md:px-0 min-w-full">
+            <table class="w-full min-w-[1000px] border-separate border-spacing-0 rounded-2xl overflow-hidden border border-divider text-[12px] md:text-[13px] text-ink-2">
+              <thead>
+                <tr class="bg-surface-2">
+                  <th class="text-left font-semibold p-3 align-top w-[160px]">Feature</th>
+                  {compColumns.map((col) => (
+                    <th class="font-semibold p-3 align-top">
+                      <div class="flex flex-col items-center gap-3 text-center">
+                        <div class="h-12 w-12 rounded-md bg-white border border-divider overflow-hidden flex items-center justify-center">
+                          <img src={col.logo} alt={col.name + ' logo'} class="h-full w-full object-contain" loading="lazy" />
+                        </div>
+                        <span class="text-[13px] md:text-[14px] font-medium leading-[1.3] text-ink-2">{col.name}</span>
+                      </div>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {compRows.map((row) => (
+                  <tr>
+                    <td class="p-3 align-middle border-t border-divider font-medium bg-white">
+                      {row.feature}
+                    </td>
+                    {row.cells.map((cell) => {
+                      const v = cell.toLowerCase();
+                      return (
+                        <td class="p-3 align-middle border-t border-divider text-center bg-white">
+                          {v === "yes" ? (
+                            <img src="/case-studies/smart-start-banking/tick.svg" alt="Yes" class="inline-block h-5 w-5" />
+                          ) : v === "no" ? (
+                            <img src="/case-studies/smart-start-banking/cross.svg" alt="No" class="inline-block h-5 w-5" />
+                          ) : (
+                            cell
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Refined brief (Figma 47:1842 — pb 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">Refined brief</TextBlock>
+          </div>
+          <div class="md:flex-1 flex flex-col gap-4">
+            <TextBlock variant="body-lg">
+              Design Smart Start Banking with the following intent
+            </TextBlock>
+            {briefIntents.map((intent, i) => (
+              <NumberedItem n={i + 1} title={intent.title}>
+                {intent.body}
+              </NumberedItem>
+            ))}
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── My role text (Figma 47:1847 — pb 40) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-10 md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">My Role &amp; Team Shape</TextBlock>
+          </div>
+          <div class="md:flex-1 flex flex-col gap-3">
+            <TextBlock variant="body">
+              My role spanned strategy, product design, vendor collaboration, and cross-functional alignment across three concurrent work streams and 10+ collaborators.<br />
+              Specifically, I designed the application journey and guiding overall experience direction.
+            </TextBlock>
+            <TextBlock variant="body">
+              Collaboration across product, business, legal, content, accessibility, design systems, and engineering.
+            </TextBlock>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── My role image (Figma 47:1850 — pb 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="overflow-hidden rounded-2xl bg-grey-200 aspect-[1160/416]">
+          <img
+            src="/case-studies/smart-start-banking/team.jpg"
+            alt="Team shape diagram"
+            class="h-full w-full object-cover"
+            loading="lazy"
+          />
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Process intro (Figma 47:1852 — pb 40) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-10 md:px-[60px]">
+        <div class="flex flex-col gap-6">
+          <TextBlock variant="section-title">
+            Designing the process before designing the product
+          </TextBlock>
+          <div class="flex flex-col gap-3 max-w-[1040px]">
+            <TextBlock variant="body">
+              With three internal design teams, a vendor partner, and stakeholders across Legal, Business, and Engineering, misalignment was the biggest risk to the project. I structured discovery to prevent it.
+            </TextBlock>
+            <TextBlock variant="body">
+              The process had a deliberate shape: a pre-read to get everyone to the same starting point, a deep working session to build shared understanding, and a shorter follow-up to assign ownership and timelines. Every step had a specific output.
+            </TextBlock>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Process plan (Figma 47:1855 — pb 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="flex flex-col gap-4">
+          {processRows.map((row) => {
+            const p = palettes[row.palette as keyof typeof palettes];
+            return (
+              <div class="flex flex-col md:flex-row gap-2 md:gap-6 items-stretch">
+                <div class:list={[p.goalBg, "rounded-2xl flex items-center justify-center p-4 md:p-6 md:w-[130px] md:shrink-0"]}>
+                  <TextBlock variant="caption" class="text-center text-ink-2">
+                    {row.label}
+                  </TextBlock>
+                </div>
+                <div class="flex-1 flex flex-col md:flex-row overflow-hidden rounded-2xl">
+                  {row.cols.map((col, ci) => (
+                    <div class:list={[
+                      p.cellBg,
+                      "flex-1 flex flex-col gap-4 p-5 md:p-6",
+                      ci < row.cols.length - 1 ? `md:border-r border-solid ${p.border}` : "",
+                    ]}>
+                      {col.title && (
+                        <p class:list={[p.title, "text-[12px] font-semibold uppercase tracking-[-0.12px] leading-[1.2]"]}>
+                          {col.title}
+                        </p>
+                      )}
+                      <ul class="list-disc pl-5 flex flex-col gap-2 text-[14px] leading-[1.5] text-ink-2">
+                        {col.items.map((it) => <li>{it}</li>)}
+                      </ul>
+                      {col.duration && <TextBlock variant="body">{col.duration}</TextBlock>}
+                      {col.outcome && (
+                        <div class:list={[p.outcomeBg, "rounded-2xl p-4 flex flex-col gap-2 mt-auto"]}>
+                          <TextBlock variant="caption" class="text-ink-2">Why?</TextBlock>
+                          <TextBlock variant="body">{col.outcome}</TextBlock>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Persona title (Figma 47:1896 — pb 40) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-10 md:px-[60px]">
+        <TextBlock variant="section-title" as="h3">Core user</TextBlock>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Persona container (Figma 47:1898 — pb 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="rounded-2xl border border-divider overflow-hidden flex flex-col md:flex-row">
+          <div class="bg-white flex flex-col items-center md:items-stretch p-6 md:w-[400px] md:shrink-0">
+            <div class="rounded-xl overflow-hidden bg-grey-200 size-[200px] mx-auto">
+              <img
+                src="/case-studies/smart-start-banking/persona-mark-ethan.jpg"
+                alt="Photo of Mark and Ethan"
+                class="h-full w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+            <div class="flex flex-col gap-2 pt-6 text-center md:text-left">
+              <div class="flex flex-col md:flex-row md:items-baseline gap-1 md:gap-2">
+                <h4 class="text-[20px] font-medium leading-[1.4] text-ink-2">Mark (42) &amp; Ethan (10)</h4>
+                <TextBlock variant="body">San Jose, CA</TextBlock>
+              </div>
+              <TextBlock variant="caption">Background</TextBlock>
+              <div class="text-[14px] leading-[1.5] text-ink-2 text-left">
+                <p class="font-semibold mb-2">Mark</p>
+                <ul class="list-disc pl-5 mb-3 flex flex-col gap-2">
+                  <li>Manages most of his finances digitally through mobile banking.</li>
+                  <li>Grew up using cash and paper checks, learned money management through trial and error.</li>
+                  <li>Believes kids today need earlier exposure to financial tools, not just lectures.</li>
+                </ul>
+                <p class="font-semibold mb-2">Ethan</p>
+                <ul class="list-disc pl-5 flex flex-col gap-2">
+                  <li>Curious and becoming independent</li>
+                  <li>Gets a weekly allowance and occasional money for birthdays and holidays.</li>
+                  <li>Starting to understand that money runs out and choices matter.</li>
+                  <li>Notices that adults tap cards and use apps.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-1 bg-divider">
+            {personaCards.map((card) => (
+              <div class="bg-surface-2 p-6 flex flex-col gap-4">
+                <TextBlock variant="caption">{card.label}</TextBlock>
+                <div class="text-[14px] leading-[1.5] text-ink-2 flex flex-col gap-3">
+                  {card.sections.map((sec) => (
+                    <div>
+                      {sec.person && <p class="font-semibold mb-2">{sec.person}</p>}
+                      <ul class="list-disc pl-5 flex flex-col gap-2">
+                        {sec.items.map((item) => <li>{item}</li>)}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    </div>
+    <!-- Wider 1400px container — Key wins + Pushbacks (mockup-heavy sections) -->
+    <div class="mx-auto w-full max-w-[1400px]">
+
+    <!-- ─────────── Key wins title (Figma 47:1922 — pb 40) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-10 md:px-[60px]">
+        <TextBlock variant="section-title" as="h3">Key wins</TextBlock>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Key wins (each Win-XX frame — pb 56) ─────────── -->
+    {keyWins.map((win) => (
+      <FadeIn>
+        <section class="px-4 pb-14 md:px-[60px]">
+          <div class="flex flex-col md:flex-row gap-8 items-start">
+            <!-- Mockups -->
+            <div class="flex items-center gap-4 self-center md:self-start">
+              <div class="flex flex-col items-center gap-4">
+                <div class="relative w-[140px] md:w-[280px] aspect-[280/552]">
+                  {(win.before as any).video ? (
+                    <video
+                      src={(win.before as any).video}
+                      class="absolute inset-0 h-full w-full object-contain"
+                      autoplay
+                      muted
+                      loop
+                      playsinline
+                      preload="metadata"
+                    />
+                  ) : (
+                    <img src={(win.before as any).img} alt="" class="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+                  )}
+                </div>
+                <p class="text-[12px] leading-[1.5] text-[#5a5a5a] text-center w-[140px] md:w-[280px]">
+                  {win.before.caption}
+                </p>
+              </div>
+              <svg class="w-5 md:w-10 shrink-0" viewBox="0 0 40 22" fill="none" aria-hidden="true">
+                <path d="M0 11h36M28 2l10 9-10 9" stroke="#909090" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </svg>
+              <div class="flex flex-col items-center gap-4">
+                <div class="relative w-[140px] md:w-[280px] aspect-[280/552]">
+                  {(win.after as any).video ? (
+                    <video
+                      src={(win.after as any).video}
+                      class="absolute inset-0 h-full w-full object-contain"
+                      autoplay
+                      muted
+                      loop
+                      playsinline
+                      preload="metadata"
+                    />
+                  ) : (
+                    <img src={(win.after as any).img} alt="" class="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+                  )}
+                </div>
+                <p class="text-[12px] leading-[1.5] text-[#5a5a5a] text-center w-[140px] md:w-[280px]">
+                  {win.after.caption}
+                </p>
+              </div>
+            </div>
+
+            <!-- Feature summary -->
+            <div class="flex-1 flex flex-col gap-6">
+              {win.features.map((f) => (
+                <div class="flex flex-col gap-1">
+                  <TextBlock variant="body-lg">{f.title}</TextBlock>
+                  <TextBlock variant="body">{f.body}</TextBlock>
+                  {f.list && (
+                    <ul class="list-disc pl-5 flex flex-col gap-2 text-[14px] leading-[1.5] text-ink-2 mt-2">
+                      {f.list.map((li) => <li>{li}</li>)}
+                    </ul>
+                  )}
+                  {f.after && (
+                    <div class="mt-2">
+                      <TextBlock variant="body">{f.after}</TextBlock>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </FadeIn>
+    ))}
+
+    <!-- ─────────── Pushbacks title (Figma 47:1983 — pb 40) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-10 md:px-[60px]">
+        <TextBlock variant="section-title" as="h3">Proposals that were pushed back</TextBlock>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Pushbacks (Figma Pushback-XX — pb 56) ─────────── -->
+    {rejectedProposals.map((rp, idx) => (
+      <FadeIn>
+        <section class:list={["px-4 md:px-[60px]", idx === rejectedProposals.length - 1 ? "pb-[72px]" : "pb-14"]}>
+          <div class="flex flex-col md:flex-row gap-8 items-start">
+            <div class="flex items-center gap-4 self-center md:self-start">
+              <div class="flex flex-col items-center gap-4">
+                <div class="relative w-[140px] md:w-[280px] aspect-[280/552]">
+                  {(rp.before as any).video ? (
+                    <video
+                      src={(rp.before as any).video}
+                      class="absolute inset-0 h-full w-full object-contain"
+                      autoplay
+                      muted
+                      loop
+                      playsinline
+                      preload="metadata"
+                    />
+                  ) : (
+                    <img src={(rp.before as any).img} alt="" class="absolute inset-0 h-full w-full object-contain" loading="lazy" />
+                  )}
+                </div>
+                <p class="text-[12px] leading-[1.5] text-[#5a5a5a] text-center w-[140px] md:w-[280px]">
+                  {rp.before.caption}
+                </p>
+              </div>
+              <svg class="w-5 md:w-10 shrink-0" viewBox="0 0 40 22" fill="none" aria-hidden="true">
+                <path d="M0 11h36M28 2l10 9-10 9" stroke="#909090" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </svg>
+              <div class="flex flex-col items-center gap-4">
+                <div class="relative w-[140px] md:w-[280px] aspect-[280/552]">
+                  {(rp.after as any).video ? (
+                    <video
+                      src={(rp.after as any).video}
+                      class="absolute inset-0 h-full w-full object-contain"
+                      autoplay
+                      muted
+                      loop
+                      playsinline
+                      preload="metadata"
+                    />
+                  ) : (
+                    <img src={(rp.after as any).img} alt="" class="absolute inset-0 h-full w-full object-contain" loading="lazy" />
+                  )}
+                </div>
+                <p class="text-[12px] leading-[1.5] text-[#5a5a5a] text-center w-[140px] md:w-[280px]">
+                  {rp.after.caption}
+                </p>
+              </div>
+            </div>
+
+            <div class="flex-1 flex flex-col gap-6">
+              <div class="flex flex-col gap-1">
+                <TextBlock variant="body-lg">{rp.feature.title}</TextBlock>
+                <TextBlock variant="body">{rp.feature.body}</TextBlock>
+              </div>
+              {rp.conversation && (
+                <div class="rounded-2xl overflow-hidden border border-divider">
+                  {rp.conversation.map((c, i) => (
+                    <div class:list={[
+                      "bg-surface-2 p-4 flex flex-col gap-1",
+                      i < rp.conversation!.length - 1 ? "border-b border-divider" : "",
+                    ]}>
+                      <TextBlock variant="caption">{c.speaker}</TextBlock>
+                      <TextBlock variant="quote">“{c.quote}”</TextBlock>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      </FadeIn>
+    ))}
+
+    </div>
+    <!-- Back to 1280 — End-to-end journey + Success metrics -->
+    <div class="mx-auto w-full max-w-[1280px]">
+
+    <!-- ─────────── End-to-end journey title (pb 40) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-10 md:px-[60px]">
+        <TextBlock variant="section-title" as="h3">End-to-end journey</TextBlock>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── End-to-end journey image (pb 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="overflow-hidden rounded-2xl bg-grey-200">
+          <img
+            src="/case-studies/smart-start-banking/end-to-end-journey.jpg"
+            alt="End-to-end journey of the Smart Start Banking application flow"
+            class="block h-auto w-full"
+            loading="lazy"
+          />
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Parent's & kid's view title (pb 40) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-10 md:px-[60px]">
+        <TextBlock variant="section-title" as="h3">Parent’s &amp; kid’s view</TextBlock>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Parent's & kid's view image (pb 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="overflow-hidden rounded-2xl bg-grey-200">
+          <img
+            src="/case-studies/smart-start-banking/Parent-kid-view.jpg"
+            alt="Parent and kid views of Smart Start Banking"
+            class="block h-auto w-full"
+            loading="lazy"
+          />
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Success metrics (Figma 47:2023 — pb 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="flex flex-col gap-6 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">What success looks like</TextBlock>
+          </div>
+          <div class="md:flex-1 flex flex-col md:flex-row gap-4 md:gap-6">
+            {successMetrics.map((m) => (
+              <div class="flex-1 rounded-xl bg-surface-2 p-6 flex flex-col gap-2">
+                <TextBlock variant="caption">{m.label}</TextBlock>
+                <TextBlock variant="stat-value">{m.value}</TextBlock>
+                <TextBlock variant="body">{m.note}</TextBlock>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    </div>
+    <!-- End of project — full-bleed (no max-width wrapper) -->
+
+    <!-- ─────────── End of project (Figma 47:2038 — py 40) ─────────── -->
+    <FadeIn>
+      <section class="bg-surface-2 flex items-center justify-center gap-6 py-10 mx-4 md:mx-[60px] rounded-2xl">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M8 0L9.5 6.5L16 8L9.5 9.5L8 16L6.5 9.5L0 8L6.5 6.5L8 0Z" fill="#454545"/>
+        </svg>
+        <TextBlock variant="section-title">Thank you</TextBlock>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M8 0L9.5 6.5L16 8L9.5 9.5L8 16L6.5 9.5L0 8L6.5 6.5L8 0Z" fill="#454545"/>
+        </svg>
+      </section>
+    </FadeIn>
+
+    <!-- Back to 1280 — Next read -->
+    <div class="mx-auto w-full max-w-[1280px]">
+
+    <!-- ─────────── Next read (Figma 47:2715 — py 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pt-[72px] pb-[72px] md:px-[60px] flex flex-col gap-10">
+        <TextBlock variant="section-title">Next read</TextBlock>
+        <a
+          href="/work/flipkart-upi"
+          class="rounded-2xl bg-surface-2 border border-divider overflow-hidden flex flex-col md:flex-row md:items-center gap-4 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.06)]"
+        >
+          <div class="bg-grey-200 w-full md:w-[300px] md:shrink-0 aspect-[300/187] overflow-hidden">
+            <img src="/projects/flipkart-upi.jpg" alt="Flipkart UPI" class="h-full w-full object-cover" loading="lazy" />
+          </div>
+          <div class="flex flex-col gap-1 px-6 pb-6 md:py-6 md:pr-6">
+            <TextBlock variant="body-semibold" as="h3">Flipkart UPI</TextBlock>
+            <TextBlock variant="body">
+              An instant payment method aimed to increases the overall efficiency of the payment page. Adopted by 4M+ users
+            </TextBlock>
+            <div class="pt-6">
+              <span class="inline-flex items-center gap-2 rounded-lg bg-ink-1 px-3 py-2.5 text-[14px] font-medium leading-4 text-white">
+                View case-study
+              </span>
+            </div>
+          </div>
+        </a>
+      </section>
+    </FadeIn>
+
+    </div>
+  </article>
+
+  <SiteFooter variant="case-study" />
+</BaseLayout>

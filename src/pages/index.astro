@@ -1,0 +1,119 @@
+---
+/**
+ * Home page — hero, proud projects, writings, community, about, footer.
+ *
+ * Content lives directly in this file so it's easy to update.
+ * Images live in /public — see IMAGE-CHECKLIST.md for the export list.
+ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Nav from "../components/Nav.astro";
+import Hero from "../components/Hero.astro";
+import SectionTitle from "../components/SectionTitle.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import ArticleCard from "../components/ArticleCard.astro";
+import AboutSection from "../components/AboutSection.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import FadeIn from "../components/FadeIn.astro";
+
+// — Content —
+const projects = [
+  {
+    href: "/work/smart-start-banking",
+    image: "/projects/smart-start-banking.jpg",
+    imageAlt: "Family using laptop together — Smart start banking case study cover",
+    title: "Smart start banking",
+    blurb:
+      "A bank account for kids ages 6-17. An opportunity to serve ~6 million kids, building a pipeline of future primary banking customers.",
+    showcases: ["Navigating ambiguity", "Leadership"],
+  },
+  {
+    href: "/work/flipkart-upi",
+    image: "/projects/flipkart-upi.jpg",
+    imageAlt: "Phone screens showing Flipkart UPI flow",
+    title: "Flipkart UPI",
+    blurb:
+      "An instant payment method aimed to increase the overall efficiency of the payment page. Adopted by 4M+ users so far.",
+    showcases: ["Craft", "Navigating ambiguity"],
+  },
+];
+
+const writings = [
+  {
+    href: "https://medium.muz.li/progress-indicators-and-trackers-d7a592940041",
+    image: "/articles/progress-tracker.jpg",
+    imageAlt: "Progress tracker illustration",
+    title: "All about Progress tracker and progress indicators",
+    blurb:
+      "The write-up describes some popular ways to show progress in digital interfaces. What are design principles and when to use them?",
+    cta: "Read Article",
+  },
+];
+
+const community = [
+  {
+    href: "https://www.figma.com/community/file/1041945380736106905/user-survey-library",
+    image: "/articles/user-survey-library.jpg",
+    imageAlt: "Grid of brand logos featured in user survey library",
+    title: "User survey library",
+    blurb:
+      "I created this library to learn how big brands design their user surveys. How do they ask neutral questions.",
+    cta: "View Figma File",
+  },
+];
+---
+
+<BaseLayout>
+  <!-- Hero — pill nav nested inside via slot so it scrolls with the gradient -->
+  <Hero>
+    <Nav slot="nav" active="home" />
+  </Hero>
+
+  <!-- Proud projects -->
+  <section class="mx-auto w-full max-w-[1540px] px-5 pb-16 md:px-[150px] md:pb-24">
+    <FadeIn>
+      <SectionTitle class="mb-8 md:mb-10">Proud projects</SectionTitle>
+    </FadeIn>
+    <div class="flex flex-col items-stretch gap-8 md:flex-row md:gap-6">
+      {projects.map((p, i) => (
+        <FadeIn class="flex flex-1 min-w-0" delay={100 + i * 100}>
+          <ProjectCard {...p} />
+        </FadeIn>
+      ))}
+    </div>
+  </section>
+
+  <!-- Writings -->
+  <section class="mx-auto w-full max-w-[1540px] px-5 pb-16 md:px-[150px] md:pb-24">
+    <FadeIn>
+      <SectionTitle class="mb-8 md:mb-10">Writings</SectionTitle>
+    </FadeIn>
+    <div class="flex flex-col gap-6">
+      {writings.map((a, i) => (
+        <FadeIn delay={100 + i * 100}>
+          <ArticleCard {...a} />
+        </FadeIn>
+      ))}
+    </div>
+  </section>
+
+  <!-- Community -->
+  <section class="mx-auto w-full max-w-[1540px] px-5 pb-16 md:px-[150px] md:pb-24">
+    <FadeIn>
+      <SectionTitle class="mb-8 md:mb-10">Community</SectionTitle>
+    </FadeIn>
+    <div class="flex flex-col gap-6">
+      {community.map((a, i) => (
+        <FadeIn delay={100 + i * 100}>
+          <ArticleCard {...a} />
+        </FadeIn>
+      ))}
+    </div>
+  </section>
+
+  <!-- About me -->
+  <FadeIn>
+    <AboutSection />
+  </FadeIn>
+
+  <SiteFooter />
+</BaseLayout>

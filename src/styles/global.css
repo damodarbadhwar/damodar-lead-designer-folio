@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────────────────────
+   Design tokens — mapped 1:1 from Figma variables.
+   Use as Tailwind utilities, e.g. bg-surface-2, text-ink-1, font-serif
+   ───────────────────────────────────────────────────────────── */
+@theme {
+  /* Colors */
+  --color-surface-1: #ffffff;        /* Background/Background 1 */
+  --color-surface-2: #f6f8fb;        /* Background/Background 2 */
+  --color-surface-ink: #000000;      /* Background/Background 5 */
+  --color-divider: #dbe0ec;          /* Divider */
+  --color-ink-1: #000000;            /* Text/Paragraph 1, Headline */
+  --color-ink-2: #212121;            /* Body / dark grey used most */
+  --color-ink-3: #454545;            /* Section titles, footer note */
+  --color-ink-muted: #6c6c6c;        /* Text/Paragraph 2 */
+  --color-grey-200: #edeaea;         /* Tag chip background */
+
+  /* Typography families */
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Noto Serif", ui-serif, Georgia, serif;
+
+  /* Display sizes — your custom overrides */
+  --text-display-hero: 32px;          /* Hero "Hi, I'm Damodar" */
+  --text-display-hero--line-height: 1.2;
+  --text-display-hero--letter-spacing: -0.64px;
+
+  --text-display-section: 24px;       /* Section titles "Proud projects" */
+  --text-display-section--line-height: 1.2;
+  --text-display-section--letter-spacing: -0.24px;
+
+  /* Body / UI sizes from Figma variables */
+  --text-h5: 20px;
+  --text-h5--line-height: 1.4;
+
+  --text-body: 14px;
+  --text-body--line-height: 1.5;
+
+  --text-button: 14px;
+  --text-button--line-height: 16px;
+
+  --text-caption: 11px;
+  --text-caption--line-height: 1;
+  --text-caption--letter-spacing: 0.02em;   /* 2% */
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Base
+   ───────────────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-ink-2);
+  background: var(--color-surface-1);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   FadeIn animation — used by <FadeIn /> component
+   ───────────────────────────────────────────────────────────── */
+.fade-in {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 600ms ease-out, transform 600ms ease-out;
+  will-change: opacity, transform;
+}
+
+.fade-in.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-in {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

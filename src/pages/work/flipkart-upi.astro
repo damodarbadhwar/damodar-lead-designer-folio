@@ -1,0 +1,921 @@
+---
+/**
+ * Case study — Flipkart UPI.
+ * Pixel-perfect implementation of the Figma desktop (54317:4089).
+ *
+ * Layout follows the same container model as Smart Start Banking:
+ *   - Outer container: max-w-[1280px] centered (no widening — this case study
+ *     keeps a single column rhythm; full-width images fill the 1160px content
+ *     width within px-[60px] gutters).
+ *   - Mobile gutter: 16px (px-4)
+ *   - Desktop gutter: 60px (md:px-[60px])
+ *   - Two-column body sections: 280px label column + 32px gap + flex-1 content
+ *
+ * Section spacing rhythm — matches Figma section frame heights:
+ *   - Title:                  pb-14 (56px)
+ *   - Summary:                pb-14 (56px)
+ *   - Hero:                   pb-14 (56px)
+ *   - Problem:                pb-10 (40px)
+ *   - Current flow image:     pb-10 (40px)
+ *   - Biggest reason:         pb-10 (40px)
+ *   - Why lower success rate: pb-[72px]
+ *   - Opportunities:          pb-[72px]
+ *   - Market analysis intro:  pb-2  (8px)  — flows directly into image
+ *   - Market analysis image:  pb-[72px]
+ *   - Competitive analysis:   pb-10 (40px)
+ *   - Comp analysis images:   pb-[72px]
+ *   - Core user title:        pb-10 (40px)
+ *   - Persona container:      pb-[72px]
+ *   - Ideation workshop:      pb-10 (40px)
+ *   - Themes discussed:       pb-10 (40px)
+ *   - Raw ideas:              pb-10 (40px)
+ *   - Most voted ideas:       pb-[72px]
+ *   - Mood board:             pb-10 (40px)
+ *   - Design elements:        pb-10 (40px)
+ *   - Exp UI:                 pb-10 (40px)
+ *   - Exp success:            pb-[72px]
+ *   - Leadership reaction:    pb-[72px]
+ *   - Touchpoints:            pb-[72px]
+ *   - Link and pay:           pb-[72px]
+ *   - NPCI guidelines:        pb-[72px]
+ *   - Linking the bank:       pb-[72px]
+ *   - Next step UPI:          pb-[72px]
+ *   - Success definition:     pb-[72px]
+ *   - Result metrics:         pb-[72px]
+ *   - Closing thoughts:       pb-[72px]
+ *   - Appendix:               pb-[72px]
+ *   - End of project banner:  py-10 (40px)
+ *   - Next read:              py-[72px]
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Nav from "../../components/Nav.astro";
+import FadeIn from "../../components/FadeIn.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+import TextBlock from "../../components/TextBlock.astro";
+import MetaData from "../../components/MetaData.astro";
+import NumberedItem from "../../components/NumberedItem.astro";
+
+// — Page meta —
+const summary = [
+  { label: "ROLE", value: "Lead designer" },
+  { label: "TIMELINE", value: "Dec 23 – Apr 24" },
+  { label: "PLATFORM", value: "iOS, Android and web" },
+];
+
+// — Opportunities (numbered list)
+const opportunities = [
+  "Every 1% of improvement in success rate would bring in additional ~38 Cr in Gross Revenue.",
+  "Improve monthly active users",
+];
+
+// — Persona (Manoj Rajan)
+const personaCards = [
+  {
+    label: "Needs",
+    items: [
+      "Easy discovery of offers and cashback",
+      "Clear rewards and savings visibility",
+      "Fast, simple UPI payments",
+      "Trust before trying new products",
+      "Simple reward tracking",
+    ],
+  },
+  {
+    label: "Motivations",
+    items: [
+      "Maximize savings on daily spends",
+      "Find exclusive deals early",
+      "Get more value from UPI",
+      "Share deals with peers",
+      "Try tools with clear benefits",
+    ],
+  },
+];
+
+// — Ideation workshop themes
+const workshopThemes = [
+  {
+    label: "Acquisition",
+    body: "Why would the user start using Flipkart UPI?",
+    icon: `<svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      <rect width="32" height="32" rx="6" fill="#E0ECFD"/>
+      <path d="M9.44727 11.8454C9.44727 10.4349 10.0076 9.08228 11.0049 8.08495C12.0022 7.08763 13.3549 6.52734 14.7653 6.52734C16.1757 6.52734 17.5284 7.08763 18.5257 8.08495C19.523 9.08228 20.0833 10.4349 20.0833 11.8454" stroke="#204AD2" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M10.2658 26.9811L7.2673 21.8676C7.00035 21.3981 6.92994 20.842 7.07146 20.3208C7.21298 19.7995 7.55492 19.3554 8.02268 19.0853C8.49043 18.8153 9.04602 18.7412 9.5682 18.8792C10.0904 19.0173 10.5368 19.3563 10.8099 19.8222L12.7203 22.8903V11.8452C12.7203 11.3027 12.9358 10.7825 13.3194 10.3989C13.703 10.0153 14.2232 9.7998 14.7657 9.7998C15.3082 9.7998 15.8284 10.0153 16.212 10.3989C16.5956 10.7825 16.8111 11.3027 16.8111 11.8452V17.5723C16.8111 17.0298 17.0266 16.5096 17.4102 16.126C17.7938 15.7424 18.314 15.5269 18.8565 15.5269C19.399 15.5269 19.9192 15.7424 20.3028 16.126C20.6864 16.5096 20.9019 17.0298 20.9019 17.5723V19.2086C20.9019 18.6661 21.1174 18.1459 21.501 17.7623C21.8845 17.3787 22.4048 17.1632 22.9473 17.1632C23.4897 17.1632 24.01 17.3787 24.3936 17.7623C24.7772 18.1459 24.9927 18.6661 24.9927 19.2086V22.8903C24.9927 25.3448 24.1745 26.9811 24.1745 26.9811" stroke="#204AD2" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`,
+  },
+  {
+    label: "Retention",
+    body: "Why would they keep using the feature?",
+    icon: `<svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      <rect width="32" height="32" rx="6" fill="#E0ECFD"/>
+      <path d="M22.417 12.0273L24.667 9.77734L22.417 7.52734" stroke="#204AD2" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M6.66699 15.7773C6.66699 14.186 7.29913 12.6599 8.42435 11.5347C9.54957 10.4095 11.0757 9.77734 12.667 9.77734H24.667" stroke="#204AD2" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M8.91699 19.5273L6.66699 21.7773L8.91699 24.0273" stroke="#204AD2" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M24.667 15.7773C24.667 17.3686 24.0349 18.8948 22.9096 20.02C21.7844 21.1452 20.2583 21.7773 18.667 21.7773H6.66699" stroke="#204AD2" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>`,
+  },
+  {
+    label: "Distribution",
+    body: "Explore an organic channel of distribution",
+    icon: `<svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      <rect width="32" height="32" rx="6" fill="#E0ECFD"/>
+      <path d="M20.334 14.0273H22.584C22.7829 14.0273 22.9737 14.1064 23.1143 14.247C23.255 14.3877 23.334 14.5784 23.334 14.7773V23.7773C23.334 23.9763 23.255 24.167 23.1143 24.3077C22.9737 24.4483 22.7829 24.5273 22.584 24.5273H9.08398C8.88507 24.5273 8.69431 24.4483 8.55365 24.3077C8.413 24.167 8.33398 23.9763 8.33398 23.7773V14.7773C8.33398 14.5784 8.413 14.3877 8.55365 14.247C8.69431 14.1064 8.88507 14.0273 9.08398 14.0273H11.334" stroke="#204AD2" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M12.084 10.2773L15.834 6.52734L19.584 10.2773" stroke="#204AD2" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M15.834 6.52734V17.0273" stroke="#204AD2" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>`,
+  },
+];
+
+// — Most voted ideas
+const votedIdeas = [
+  {
+    img: "/case-studies/flipkart-upi/voted-desi-design.jpg",
+    caption: "Explore a design language that is relatable to Indian consumers",
+  },
+  {
+    img: "/case-studies/flipkart-upi/voted-money-plant.jpg",
+    caption: "A plant that grows as you use UPI. The fruits = brand coupons, cash backs",
+  },
+  {
+    img: "/case-studies/flipkart-upi/voted-delivery-bag.jpg",
+    caption: "Advertise on delivery bags",
+  },
+];
+
+// — Leadership reaction concerns
+const leadershipConcerns = [
+  {
+    title: "Conflict with bill payments feature",
+    body: "Another team was working in parallel on designing bill payments. Both UPI and bill payments will share a common page, so the design language needs to be the same for both features. However, their launch timelines were ahead of ours, and they designed the majority using our design system, which caused a clash.",
+  },
+  {
+    title: "Resource intensive",
+    body: "Custom components will stretch the effort and hence the timeline.",
+  },
+];
+
+// — Success definition
+const successDefinition = [
+  "Feature adoption: Signups, transacting base, frequency of transactions",
+  "Success rate improvements for UPI payments: 72 to 76%",
+  "Share of Flipkart UPI on Flipkart",
+];
+
+// — Result metrics (Jun 2025)
+const resultMetrics = [
+  { value: "~5.5%", note: "Success rate improvements" },
+  { value: "~209 Cr", note: "Expected GMV for full year" },
+  { value: "4.5M+", note: "improvement in funnel conversion" },
+];
+---
+
+<BaseLayout
+  title="Flipkart UPI — Damodar Badhwar"
+  description="An instant payment method that increased UPI success rates and GMV on Flipkart. Adopted by 4.5M+ users."
+>
+  <!-- Top container: 24px above nav, then nav, then 56px gap before title -->
+  <div class="mx-auto w-full max-w-[1280px] px-4 pt-6 md:px-[60px]">
+    <Nav />
+  </div>
+
+  <article>
+    <div class="mx-auto w-full max-w-[1280px]">
+
+    <!-- ─────────── Title (Figma 54326:29243) ─────────── -->
+    <FadeIn>
+      <header class="px-4 pt-14 pb-14 md:px-[60px]">
+        <h1
+          class="block w-full font-serif font-medium text-ink-3 leading-[1.2] text-[32px] tracking-[-0.64px] md:text-[56px] md:tracking-[-1.12px]"
+        >
+          Building Flipkart UPI
+        </h1>
+      </header>
+    </FadeIn>
+
+    <!-- ─────────── Summary metadata (Figma 54326:29246 — pb 56) ─────────── -->
+    <FadeIn delay={80}>
+      <section class="px-4 pb-14 md:px-[60px]">
+        <div class="flex flex-wrap gap-x-8 gap-y-5 md:gap-x-16">
+          {summary.map((item) => (
+            <MetaData label={item.label} value={item.value} />
+          ))}
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Hero image (Figma 54326:29259 — pb 56) ─────────── -->
+    <FadeIn delay={120}>
+      <section class="px-4 pb-14 md:px-[60px]">
+        <div class="overflow-hidden rounded-2xl bg-grey-200 aspect-[812/304]">
+          <img
+            src="/case-studies/flipkart-upi/hero.jpg"
+            alt="Flipkart UPI case study cover"
+            class="h-full w-full object-cover"
+            loading="eager"
+          />
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Problem (Figma 54326:29262 — pb 40) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-10 md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">Problem</TextBlock>
+          </div>
+          <div class="md:flex-1">
+            <TextBlock variant="body-lg">
+              UPI is the 2nd most used payment method on Flipkart but the current journey has leaks.
+            </TextBlock>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── UPI current flow image (Figma 54317:8810 — pb 40) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-10 md:px-[60px]">
+        <div class="overflow-hidden rounded-2xl bg-grey-200 aspect-[800/224]">
+          <img
+            src="/case-studies/flipkart-upi/current-flow.jpg"
+            alt="Current Flipkart UPI payment flow"
+            class="h-full w-full object-contain"
+            loading="lazy"
+          />
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── The biggest reason (Figma 54326:29269 — pb 40) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-10 md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">The biggest reason</TextBlock>
+          </div>
+          <div class="md:flex-1 flex flex-col gap-6">
+            <TextBlock variant="body-lg">
+              Timed-out transactions. The overall success rate of UPI payment flows were trending around 72%
+            </TextBlock>
+            <div class="rounded-2xl bg-white border border-divider p-6 max-w-[512px]">
+              <div class="overflow-hidden">
+                <img
+                  src="/case-studies/flipkart-upi/success-rate-chart.jpg"
+                  alt="Success rate comparison: Flipkart 72% vs NPCI benchmark 85%"
+                  class="w-full h-auto"
+                  loading="lazy"
+                />
+              </div>
+              <p class="text-[12px] leading-[1.5] text-ink-muted mt-4">
+                Success rate comparison: Flipkart vs benchmark
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Why a lower success rate? (Figma 54326:29345 — pb 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">Why a lower success rate?</TextBlock>
+          </div>
+          <div class="md:flex-1 rounded-2xl bg-[#f1f5ff] px-8 py-6 flex flex-col gap-4 items-center">
+            <div class="overflow-hidden w-full">
+              <img
+                src="/case-studies/flipkart-upi/failure-reasons.jpg"
+                alt="Past three month data on failed UPI transactions"
+                class="w-full h-auto"
+                loading="lazy"
+              />
+            </div>
+            <TextBlock variant="body" class="text-center">
+              Past three month data on failed UPI transactions
+            </TextBlock>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Opportunities (Figma 54317:4246 — pb 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">Opportunities</TextBlock>
+          </div>
+          <div class="md:flex-1 flex flex-col gap-4">
+            {opportunities.map((opp, i) => (
+              <div class="flex items-start gap-2">
+                <p class="w-7 shrink-0 font-sans font-semibold leading-[24px] md:leading-[30px] text-[#909090] text-[20px]">
+                  {String(i + 1).padStart(2, "0")}
+                </p>
+                <TextBlock variant="body-lg">{opp}</TextBlock>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Market analysis intro (Figma 54326:29479 — pb 8) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-2 md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">Market analysis</TextBlock>
+          </div>
+          <div class="md:flex-1">
+            <TextBlock variant="body">
+              Examined the dominant players in UPI by number of transactions and by value of the transaction.
+            </TextBlock>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Market analysis image (Figma 54326:29497 — pb 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0 hidden md:block" aria-hidden="true"></div>
+          <div class="md:flex-1">
+            <div class="max-w-[500px]">
+              <img
+                src="/case-studies/flipkart-upi/market-analysis.jpg"
+                alt="Market analysis chart of UPI players by transactions and value"
+                class="w-full h-auto"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Competitive analysis (Figma 54326:29519 — pb 40) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-10 md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">Competitive analysis</TextBlock>
+          </div>
+          <div class="md:flex-1 flex flex-col gap-2">
+            <TextBlock variant="body-medium">Key insights:</TextBlock>
+            <TextBlock variant="body">
+              We examined the top 3 players, mapping out their core user journeys, number of clicks for task completion, and the inputs they require. We also noted qualitative aspects such as moments of delight and areas where better UX can be provided.
+            </TextBlock>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Comp analysis images (Figma 54317:4264 — pb 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="flex flex-col gap-4">
+          <div class="overflow-hidden">
+            <img
+              src="/case-studies/flipkart-upi/comp-analysis-1.jpg"
+              alt="Competitive analysis: user journeys"
+              class="w-full h-auto"
+              loading="lazy"
+            />
+          </div>
+          <div class="overflow-hidden">
+            <img
+              src="/case-studies/flipkart-upi/comp-analysis-2.jpg"
+              alt="Competitive analysis: input requirements and delight moments"
+              class="w-full h-auto"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Core user title (Figma 54327:29574 — pb 40) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-10 md:px-[60px]">
+        <TextBlock variant="section-title" as="h3">Core user</TextBlock>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Persona container (Figma 54317:4311 — pb 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="rounded-2xl border border-divider overflow-hidden flex flex-col">
+          <div class="bg-white flex flex-col md:flex-row gap-6 items-start">
+            <div class="rounded-xl overflow-hidden bg-grey-200 size-[200px] shrink-0 mx-auto md:mx-0">
+              <img
+                src="/case-studies/flipkart-upi/persona-manoj.jpg"
+                alt="Photo of Manoj Rajan"
+                class="h-full w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+            <div class="flex-1 flex flex-col gap-2 p-6 md:py-6 md:pr-6 md:pl-0">
+              <h4 class="text-[20px] font-medium leading-[1.4] text-ink-2">
+                <span>Manoj Rajan- </span>
+                <span>The value hunter</span>
+              </h4>
+              <p class="text-[14px] leading-[1.5] text-ink-2">
+                Manoj Rajan is a small shop owner who actively looks for deals, cashback, and extra benefits. Comfortable with UPI and digital payments, he is willing to try new platforms if they offer clear financial value. He often shares good deals with his network.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-1 bg-divider">
+            {personaCards.map((card) => (
+              <div class="bg-surface-2 p-6 flex flex-col gap-4">
+                <p class="text-[20px] font-medium leading-[1.4] text-ink-2">{card.label}</p>
+                <ul class="list-disc pl-5 flex flex-col gap-2 text-[14px] leading-[1.5] text-ink-2">
+                  {card.items.map((item) => <li>{item}</li>)}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Ideation workshop (Figma 54327:29582 — pb 40) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-10 md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">Ideation workshop</TextBlock>
+          </div>
+          <div class="md:flex-1">
+            <TextBlock variant="body">
+              Since UPI is a standard feature, I wanted to explore new, industry-first ideas. I invited people from design and product team for a blue-sky session.
+            </TextBlock>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Themes discussed (Figma 54327:29592 — pb 40) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-10 md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <p class="font-serif text-ink-3 text-[20px] leading-[1.4]">
+              Themes discussed
+            </p>
+          </div>
+          <div class="md:flex-1 flex flex-col md:flex-row gap-4">
+            {workshopThemes.map((theme) => (
+              <div class="flex-1 rounded-xl bg-surface-2 p-6 flex flex-col gap-2">
+                <TextBlock variant="caption">{theme.label}</TextBlock>
+                <div class="flex items-start gap-3">
+                  <div class="shrink-0" set:html={theme.icon} />
+                  <TextBlock variant="body" class="flex-1">{theme.body}</TextBlock>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Raw ideas (Figma 54327:29884 — pb 40) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-10 md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <p class="font-serif text-ink-3 text-[20px] leading-[1.4]">
+              Raw ideas
+            </p>
+          </div>
+          <div class="md:flex-1">
+            <div class="overflow-hidden rounded-2xl">
+              <img
+                src="/case-studies/flipkart-upi/raw-ideas.jpg"
+                alt="Raw ideas from the workshop"
+                class="w-full h-auto object-cover"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Most voted ideas (Figma 54327:29926 — pb 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <p class="font-serif text-ink-3 text-[20px] leading-[1.4]">
+              Most voted ideas
+            </p>
+          </div>
+          <div class="md:flex-1 grid grid-cols-1 md:grid-cols-3 gap-8">
+            {votedIdeas.map((idea) => (
+              <div class="flex flex-col items-center gap-4">
+                <div class="overflow-hidden rounded-2xl bg-grey-200 w-full aspect-[261/160]">
+                  <img
+                    src={idea.img}
+                    alt={idea.caption}
+                    class="h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+                <TextBlock variant="body" class="text-center">{idea.caption}</TextBlock>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Mood board (Figma 54327:30058 — pb 40) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-10 md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">Mood board</TextBlock>
+          </div>
+          <div class="md:flex-1">
+            <div class="overflow-hidden rounded-2xl bg-grey-200 aspect-[1280/475]">
+              <img
+                src="/case-studies/flipkart-upi/mood-board.jpg"
+                alt="Mood board for visual exploration"
+                class="h-full w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Design elements (Figma 54327:30071 — pb 40) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-10 md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">Design elements</TextBlock>
+          </div>
+          <div class="md:flex-1">
+            <div class="overflow-hidden rounded-2xl bg-grey-200 aspect-[848/218]">
+              <img
+                src="/case-studies/flipkart-upi/design-elements.jpg"
+                alt="Design elements palette"
+                class="h-full w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Exp UI (Figma 54327:30084 — pb 40) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-10 md:px-[60px]">
+        <div class="overflow-hidden rounded-2xl bg-grey-200 aspect-[4096/2660]">
+          <img
+            src="/case-studies/flipkart-upi/exp-ui.jpg"
+            alt="UI explorations"
+            class="h-full w-full object-cover"
+            loading="lazy"
+          />
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Exp success (Figma 54327:124998 — pb 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="overflow-hidden aspect-[1692/638]">
+          <img
+            src="/case-studies/flipkart-upi/exp-success.jpg"
+            alt="Successful experience explorations"
+            class="h-full w-full object-cover"
+            loading="lazy"
+          />
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Leadership reaction (Figma 54327:125009 — pb 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">Leadership reaction</TextBlock>
+          </div>
+          <div class="md:flex-1 flex flex-col gap-4">
+            <TextBlock variant="body">
+              When I presented the concepts (in a logical flow), their body language showed that they were enjoying seeing something different from the usual design. However, there were concerns about the practicality.
+            </TextBlock>
+            <div class="flex flex-col gap-4">
+              {leadershipConcerns.map((concern, i) => (
+                <NumberedItem n={i + 1} title={concern.title}>
+                  {concern.body}
+                </NumberedItem>
+              ))}
+            </div>
+            <TextBlock variant="body-lg">
+              We limited the visual scope to banners and used design system elements for core journeys.
+            </TextBlock>
+            <div class="overflow-hidden rounded-2xl bg-grey-200 aspect-[4096/1890]">
+              <img
+                src="/case-studies/flipkart-upi/leadership-banners.jpg"
+                alt="Banner-only visual scope on core journeys"
+                class="h-full w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Touchpoints across the app (Figma 54327:125052 — pb 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">Touchpoints across the app</TextBlock>
+          </div>
+          <div class="md:flex-1">
+            <div class="overflow-hidden rounded-2xl bg-grey-200 aspect-[4096/1300]">
+              <img
+                src="/case-studies/flipkart-upi/touchpoints.jpg"
+                alt="UPI touchpoints across the Flipkart app"
+                class="h-full w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Link and Pay (Figma 54327:125079 — pb 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">Link and Pay from Payments page</TextBlock>
+          </div>
+          <div class="md:flex-1 flex flex-col gap-4 overflow-hidden rounded-2xl">
+            <div class="overflow-hidden aspect-[696/333]">
+              <img
+                src="/case-studies/flipkart-upi/link-pay-1.jpg"
+                alt="Link and Pay entry from payments page — step 1"
+                class="h-full w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+            <div class="overflow-hidden aspect-[4096/1829]">
+              <img
+                src="/case-studies/flipkart-upi/link-pay-2.jpg"
+                alt="Link and Pay flow — step 2"
+                class="h-full w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+            <div class="overflow-hidden aspect-[4096/1829]">
+              <img
+                src="/case-studies/flipkart-upi/link-pay-3.jpg"
+                alt="Link and Pay flow — step 3"
+                class="h-full w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── App home page guidelines by NPCI (Figma 54327:125138 — pb 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">App home page guidelines by NPCI</TextBlock>
+          </div>
+          <div class="md:flex-1 flex flex-col gap-4">
+            <TextBlock variant="body">
+              It states, every UPI player has to put at least one UPI touchpoint on first fold of the app.
+            </TextBlock>
+            <div class="overflow-hidden rounded-2xl bg-grey-200 aspect-[4096/2295]">
+              <img
+                src="/case-studies/flipkart-upi/npci-guidelines.jpg"
+                alt="UPI placement on app home page per NPCI guidelines"
+                class="h-full w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Linking the bank (Figma 54327:125165 — pb 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">Linking the bank</TextBlock>
+          </div>
+          <div class="md:flex-1 flex flex-col gap-4">
+            <TextBlock variant="body">
+              We had 2 approaches — to let user select the bank they want to link. Another was to fetch all the banks linked to Flipkart's number. We chose the first approach as it is less intrusive and many people use Flipkart with their secondary number. Moreover we only want to link the bank that the user uses for shopping.
+            </TextBlock>
+            <div class="overflow-hidden rounded-2xl bg-grey-200 aspect-[828/751]">
+              <img
+                src="/case-studies/flipkart-upi/bank-linking.jpg"
+                alt="Bank linking flow"
+                class="h-full w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Next step after setting up UPI (Figma 54327:125182 — pb 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">Next step after setting up UPI</TextBlock>
+          </div>
+          <div class="md:flex-1 flex flex-col gap-4">
+            <TextBlock variant="body">
+              Before landing the user on the UPI home screen, we thought of presenting them with three choices to make their first transaction easier.
+            </TextBlock>
+            <div class="overflow-hidden rounded-2xl bg-grey-200 aspect-[838/597]">
+              <img
+                src="/case-studies/flipkart-upi/next-step-upi.jpg"
+                alt="Three choices presented after UPI setup"
+                class="h-full w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Success definition (Figma 54327:125199 — pb 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">Success definition</TextBlock>
+          </div>
+          <div class="md:flex-1 flex flex-col gap-4">
+            {successDefinition.map((item, i) => (
+              <NumberedItem n={i + 1}>{item}</NumberedItem>
+            ))}
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Result as of Jun 2025 (Figma 54317:4456 — pb 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="flex flex-col gap-6 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">Result as of Jun 2025</TextBlock>
+          </div>
+          <div class="md:flex-1 flex flex-col md:flex-row gap-4 md:gap-6">
+            {resultMetrics.map((m) => (
+              <div class="flex-1 rounded-xl bg-surface-2 px-4 py-6 flex flex-col gap-2">
+                <TextBlock variant="stat-value">{m.value}</TextBlock>
+                <TextBlock variant="body">{m.note}</TextBlock>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Behind the screens (pb 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">Behind the screens</TextBlock>
+          </div>
+          <div class="md:flex-1">
+            <TextBlock variant="body">
+              I lead the design effort and there were 20+ stakeholders across Product, Business, Engineering and Content design teams who supported, debated, validated and shipped the feature.
+            </TextBlock>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Closing thoughts (Figma 54327:125222 — pb 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">Closing thoughts</TextBlock>
+          </div>
+          <div class="md:flex-1 flex flex-col gap-2">
+            <TextBlock variant="body">
+              Firstly, I am grateful to the design leadership for giving me this opportunity to build a significant feature from scratch.
+            </TextBlock>
+            <TextBlock variant="body">
+              Indian users are driven by offers and discounts hence to market a new feature, initial offers is a great strategy.
+            </TextBlock>
+            <TextBlock variant="body">
+              Showcasing some out of the box explorations kept stakeholders hooked in the design phase which helped me gain credibility in the team.
+            </TextBlock>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Appendix (Figma 54327:125241 — pb 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">Appendix</TextBlock>
+          </div>
+          <div class="md:flex-1 flex flex-col gap-4">
+            <div class="flex flex-col gap-2">
+              <TextBlock variant="body-medium">
+                Concept that didn't make the final deliverable
+              </TextBlock>
+              <TextBlock variant="body">
+                To boost repeat transaction, we thought of a concept of giving a virtual plant. As the user transacts using Flipkart UPI, the plant grows and gives fruits. These fruits could be branded coupons, direct cash backs etc.
+              </TextBlock>
+            </div>
+            <div class="overflow-hidden rounded-2xl bg-grey-200 aspect-[4096/1711]">
+              <img
+                src="/case-studies/flipkart-upi/appendix-plant.jpg"
+                alt="Virtual plant concept that didn't ship"
+                class="h-full w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    </div>
+    <!-- End of project — full-bleed banner -->
+
+    <!-- ─────────── End of project (Figma 54317:4471 — py 40) ─────────── -->
+    <FadeIn>
+      <section class="bg-surface-2 flex items-center justify-center gap-6 py-10 mx-4 md:mx-[60px] rounded-2xl text-center">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" class="shrink-0">
+          <path d="M8 0L9.5 6.5L16 8L9.5 9.5L8 16L6.5 9.5L0 8L6.5 6.5L8 0Z" fill="#454545"/>
+        </svg>
+        <TextBlock variant="section-title">That's about my journey designing Flipkart UPI!</TextBlock>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" class="shrink-0">
+          <path d="M8 0L9.5 6.5L16 8L9.5 9.5L8 16L6.5 9.5L0 8L6.5 6.5L8 0Z" fill="#454545"/>
+        </svg>
+      </section>
+    </FadeIn>
+
+    <!-- Back to 1280 — Next read -->
+    <div class="mx-auto w-full max-w-[1280px]">
+
+    <!-- ─────────── Next read (Figma 54317:4481 — py 72) ─────────── -->
+    <FadeIn>
+      <section class="px-4 pt-[72px] pb-[72px] md:px-[60px] flex flex-col gap-10">
+        <TextBlock variant="section-title">Next read</TextBlock>
+        <a
+          href="/work/smart-start-banking"
+          class="rounded-2xl bg-surface-2 border border-divider overflow-hidden flex flex-col md:flex-row md:items-center gap-4 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.06)]"
+        >
+          <div class="bg-grey-200 w-full md:w-[300px] md:shrink-0 aspect-[300/187] overflow-hidden">
+            <img src="/projects/smart-start-banking.jpg" alt="Smart Start Banking" class="h-full w-full object-cover" loading="lazy" />
+          </div>
+          <div class="flex flex-col gap-1 px-6 pb-6 md:py-6 md:pr-6">
+            <TextBlock variant="body-semibold" as="h3">Smart start banking</TextBlock>
+            <TextBlock variant="body">
+              A bank account for kids ages 6-17. An opportunity to serve ~6 million kids, building a pipeline of future primary banking customers.
+            </TextBlock>
+            <div class="pt-6">
+              <span class="inline-flex items-center gap-2 rounded-lg bg-ink-1 px-3 py-2.5 text-[14px] font-medium leading-4 text-white">
+                View case-study
+              </span>
+            </div>
+          </div>
+        </a>
+      </section>
+    </FadeIn>
+
+    </div>
+  </article>
+
+  <SiteFooter variant="case-study" />
+</BaseLayout>

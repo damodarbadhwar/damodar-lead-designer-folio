@@ -1,0 +1,48 @@
+---
+/**
+ * <FadeIn> — wraps children and fades them in once they enter the viewport.
+ *
+ * Uses IntersectionObserver + a CSS class swap (.fade-in → .is-visible).
+ * Respects `prefers-reduced-motion`.
+ *
+ * Props:
+ *   delay  — ms before the transition kicks in (for staggered reveals)
+ *   class  — extra utility classes applied to the wrapper
+ *   as     — element tag, defaults to "div"
+ */
+export interface Props {
+  delay?: number;
+  class?: string;
+  as?: keyof HTMLElementTagNameMap;
+}
+
+const { delay = 0, class: extraClass = "", as: Tag = "div" } = Astro.props;
+const style = delay > 0 ? `transition-delay: ${delay}ms` : undefined;
+---
+
+<Tag class:list={["fade-in", extraClass]} style={style} data-fade>
+  <slot />
+</Tag>
+
+<script>
+  // Run once: observe every element marked with data-fade.
+  const els = document.querySelectorAll<HTMLElement>("[data-fade]");
+
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: "0px 0px -10% 0px", threshold: 0.05 }
+    );
+    els.forEach((el) => io.observe(el));
+  } else {
+    // No IO support — show everything immediately.
+    els.forEach((el) => el.classList.add("is-visible"));
+  }
+</script>

@@ -1,0 +1,72 @@
+---
+/**
+ * TextBlock — typography variants matching the Figma "Text block" component.
+ *
+ * Use this for ANY text in case study pages so typography stays consistent
+ * with the design system. Each variant maps 1:1 to a Figma text style.
+ *
+ * Variants:
+ *   h1            → Noto Serif Medium, 32 / 56px       (case study title)
+ *   section-title → Noto Serif SemiBold Italic, 24 / 32px (Overview, My Role, etc.)
+ *   body-lg       → Inter Regular, 16 / 20px           (intro paragraph)
+ *   body          → Inter Regular, 14px                (default body)
+ *   body-medium   → Inter Medium, 14px                 (lead-in summary)
+ *   body-semibold → Inter SemiBold, 14px               (list item titles)
+ *   caption       → Inter Medium uppercase, 12px       (card labels)
+ *   meta-label    → Inter SemiBold uppercase, 12px #9b9b9b (summary metadata)
+ *   stat-value    → Inter SemiBold, 28 / 32px          (success metric numbers)
+ *   quote         → Inter Italic, 18 / 20px            (stakeholder quotes)
+ *
+ * Always pass content as the default slot.
+ */
+export interface Props {
+  variant?:
+    | "h1"
+    | "section-title"
+    | "body-lg"
+    | "body"
+    | "body-medium"
+    | "body-semibold"
+    | "caption"
+    | "meta-label"
+    | "stat-value"
+    | "quote";
+  class?: string;
+  as?: keyof HTMLElementTagNameMap;
+}
+
+const { variant = "body", class: extra = "", as } = Astro.props;
+
+// Default tag per variant unless overridden
+const defaultTag: Record<string, keyof HTMLElementTagNameMap> = {
+  h1: "h1",
+  "section-title": "h2",
+  "body-lg": "p",
+  body: "p",
+  "body-medium": "p",
+  "body-semibold": "p",
+  caption: "p",
+  "meta-label": "p",
+  "stat-value": "p",
+  quote: "p",
+};
+
+const Tag = (as ?? defaultTag[variant] ?? "p") as keyof HTMLElementTagNameMap;
+
+const variantClass: Record<string, string> = {
+  h1: "font-serif font-medium text-ink-3 leading-[1.2] text-[32px] tracking-[-0.64px] md:text-[56px] md:tracking-[-1.12px] max-w-[1080px]",
+  "section-title": "font-serif italic font-semibold text-ink-3 leading-[1.2] text-[24px] tracking-[-0.24px] md:text-[32px] md:tracking-[-0.32px]",
+  "body-lg": "font-sans text-ink-2 leading-[1.5] text-[16px] md:text-[20px]",
+  body: "font-sans text-ink-2 leading-[1.5] text-[14px]",
+  "body-medium": "font-sans font-medium text-ink-2 leading-[1.5] text-[14px]",
+  "body-semibold": "font-sans font-semibold text-ink-2 leading-[1.5] text-[14px]",
+  caption: "font-sans font-medium uppercase text-[#5a5a5a] leading-[1.5] text-[12px] tracking-[1.2px]",
+  "meta-label": "font-sans font-semibold uppercase text-[#9b9b9b] leading-[1.2] text-[12px] tracking-[-0.12px]",
+  "stat-value": "font-sans font-semibold text-ink-3 leading-[1.2] text-[28px] md:text-[32px]",
+  quote: "font-sans italic text-ink-2 leading-[1.5] text-[18px] md:text-[20px]",
+};
+---
+
+<Tag class:list={[variantClass[variant], extra]}>
+  <slot />
+</Tag>

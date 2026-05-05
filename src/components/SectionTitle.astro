@@ -1,0 +1,24 @@
+---
+/**
+ * Section title — Noto Serif SemiBold Italic.
+ * Mobile: 24px / line-height 120% / letter-spacing -0.24px
+ * Desktop: 32px / line-height 120% / letter-spacing -0.32px
+ *
+ * Used for "Proud projects", "Writings", "Community", "About me".
+ */
+export interface Props {
+  class?: string;
+}
+const { class: extra = "" } = Astro.props;
+---
+
+<h2
+  class:list={[
+    "font-serif italic font-semibold text-ink-3",
+    "text-[24px] leading-[1.2] tracking-[-0.24px]",
+    "md:text-[32px] md:tracking-[-0.32px]",
+    extra,
+  ]}
+>
+  <slot />
+</h2>

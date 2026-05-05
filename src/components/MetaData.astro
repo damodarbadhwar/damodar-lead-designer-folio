@@ -1,0 +1,21 @@
+---
+/**
+ * MetaData — Figma "Meta data" component (Role / Timeline / Platform).
+ *
+ * Two stacked text blocks:
+ *   - Label: Inter SemiBold uppercase 12px #9b9b9b
+ *   - Value: Inter Regular 14px #212121
+ */
+import TextBlock from "./TextBlock.astro";
+
+export interface Props {
+  label: string;
+  value: string;
+}
+const { label, value } = Astro.props;
+---
+
+<div class="flex flex-col gap-1 whitespace-nowrap">
+  <TextBlock variant="meta-label">{label}</TextBlock>
+  <TextBlock variant="body">{value}</TextBlock>
+</div>
