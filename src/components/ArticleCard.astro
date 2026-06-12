@@ -21,11 +21,11 @@ const { href, image, imageAlt, title, blurb, cta } = Astro.props;
   href={href}
   target="_blank"
   rel="noopener"
-  class="group flex w-full flex-col items-stretch gap-4 overflow-hidden rounded-xl border border-divider bg-surface-2 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.06)] md:flex-row md:items-center md:gap-4 md:py-3"
+  class="group flex w-full flex-col items-stretch gap-4 overflow-hidden rounded-xl border border-divider bg-surface-2 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.06)] md:flex-row md:items-stretch md:gap-4"
 >
   <!-- Image -->
   <div
-    class="aspect-[300/187] w-full shrink-0 overflow-hidden bg-grey-200 md:aspect-auto md:h-[169px] md:w-[300px]"
+    class="aspect-[300/187] w-full shrink-0 overflow-hidden bg-grey-200 md:aspect-auto md:h-auto md:w-[300px] md:self-stretch"
   >
     <img
       src={image}
@@ -37,7 +37,7 @@ const { href, image, imageAlt, title, blurb, cta } = Astro.props;
   </div>
 
   <!-- Text -->
-  <div class="flex min-w-0 flex-1 flex-col gap-4 px-6 pb-6 md:py-0">
+  <div class="flex min-w-0 flex-1 flex-col gap-4 px-6 pb-6 md:py-3">
     <h3 class="text-body font-semibold text-ink-2">{title}</h3>
     <p class="text-body text-ink-2">{blurb}</p>
     <div class="pt-4">
