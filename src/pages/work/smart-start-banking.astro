@@ -322,7 +322,6 @@ const compRows: Array<{ feature: string; cells: string[] }> = [
 const successMetrics = [
   { label: "Acquisition target", value: "1 million+ accounts", note: "within the first year of launch" },
   { label: "Kid's Retention", value: "Min 20%", note: "of the kids should use one of the adult's banking product after the age of 24" },
-  { label: "Conversion delta", value: "+100–300 bps", note: "improvement in funnel conversion" },
 ];
 ---
 
@@ -874,16 +873,16 @@ const successMetrics = [
       </section>
     </FadeIn>
 
-    <!-- ─────────── Success metrics (Figma 47:2023 — pb 72) ─────────── -->
+<!-- ─────────── Success metrics (Figma 47:2023 — pb 72) ─────────── -->
     <FadeIn>
       <section class="px-4 pb-[72px] md:px-[60px]">
         <div class="flex flex-col gap-6 md:flex-row md:gap-8 md:items-start">
           <div class="md:w-[280px] md:shrink-0">
             <TextBlock variant="section-title">What success looks like</TextBlock>
           </div>
-          <div class="md:flex-1 flex flex-col md:flex-row gap-4 md:gap-6">
+          <div class="md:flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             {successMetrics.map((m) => (
-              <div class="flex-1 rounded-xl bg-surface-2 p-6 flex flex-col gap-2">
+              <div class="rounded-xl bg-surface-2 p-6 flex flex-col gap-2">
                 <TextBlock variant="caption">{m.label}</TextBlock>
                 <TextBlock variant="stat-value">{m.value}</TextBlock>
                 <TextBlock variant="body">{m.note}</TextBlock>
