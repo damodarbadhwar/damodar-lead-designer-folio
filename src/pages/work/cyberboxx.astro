@@ -1,8 +1,9 @@
 ---
 /**
  * Case study — Cyberboxx.
- * First-fold content from Case-study-Cyberboxx-desktop-01.pdf mapped onto
- * the existing layout, spacing, color, and typography conventions.
+ * Content from Case-study-Cyberboxx-desktop-01.pdf through
+ * Case-study-Cyberboxx-desktop-04.pdf mapped onto the existing layout,
+ * spacing, color, and typography conventions.
  */
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Nav from "../../components/Nav.astro";
@@ -79,6 +80,93 @@ const userPersonas = [
     challenge: "Cannot confidently judge whether something is risky",
     opportunity: "Trust indicators, simplified security advice, contextual education.",
   },
+];
+
+// — Existing product audit learnings —
+const auditLearnings = [
+  "The homepage lacked a clear starting point",
+  "Too many options",
+  "Confusing terms, text heavy articles",
+  'Low value features like "Word of the Day"',
+];
+
+// — Siren competitive screens & learnings —
+const sirenScreens = [
+  {
+    img: "/case-studies/cyberboxx/siren-dashboard.jpg",
+    alt: "Siren Solo Dashboard screen showing safety score",
+    caption: "Dashboard",
+  },
+  {
+    img: "/case-studies/cyberboxx/siren-security-tools.jpg",
+    alt: "Siren Solo Security Tools screen",
+    caption: "Security Tools",
+  },
+  {
+    img: "/case-studies/cyberboxx/siren-protection-features.jpg",
+    alt: "Siren Solo Protection Features screen",
+    caption: "Protection Features",
+  },
+];
+
+const sirenLearnings = [
+  "Wider range of security features and tools",
+  "Clear safety score and risk level with actionable next steps",
+  "Dedicated sections for security tools and learning resources",
+];
+
+// — FTUE comparison —
+const ftueScreens = [
+  {
+    img: "/case-studies/cyberboxx/ftue-current.jpg",
+    alt: "Current FTUE screen",
+    caption: "Current",
+  },
+  {
+    img: "/case-studies/cyberboxx/ftue-proposed.jpg",
+    alt: "Proposed FTUE screen",
+    caption: "Proposed",
+  },
+];
+
+const ftueImprovements = [
+  "Leads with a personalized greeting and a single clear action, followed by prevention and learning.",
+];
+
+// — User with score comparison —
+const scoreScreens = [
+  {
+    img: "/case-studies/cyberboxx/score-current.jpg",
+    alt: "Current user with score screen",
+    caption: "Current",
+  },
+  {
+    img: "/case-studies/cyberboxx/score-proposed.jpg",
+    alt: "Proposed user with score screen",
+    caption: "Proposed",
+  },
+];
+
+const scoreImprovements = [
+  "Grouped educational content into dedicated Learn section for easier discovery.",
+  "Critical actions are surfaced first, so users know exactly what to do next.",
+];
+
+// — Learn experience explorations & scenarios —
+const learnExplorations = [
+  "Image Story",
+  "Interaction Video",
+  "Audio Quiz",
+  "Poll",
+  "Spot the Red Flag(s)",
+  "MCQ",
+];
+
+const learnScenarios = [
+  "Fake arrest scam",
+  "OTP scam: 62000 gone from her account because she shared OTP to a fake bank executive on a call.",
+  "Net banking deactivation scam",
+  "21 din mein pesa double",
 ];
 ---
 
@@ -258,8 +346,195 @@ const userPersonas = [
       </section>
     </FadeIn>
 
-    </div>
-  </article>
+    <!-- ─────────── Existing product Audit ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="flex flex-col gap-6 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">Existing product Audit</TextBlock>
+          </div>
+          <div class="md:flex-1 flex flex-col gap-6">
+            <div class="overflow-hidden rounded-2xl bg-grey-200">
+              <img
+                src="/case-studies/cyberboxx/existing-product-audit.jpg"
+                alt="Existing Cyberboxx product screens and audit overview"
+                class="block h-auto w-full"
+                loading="lazy"
+              />
+            </div>
+            <div class="rounded-2xl bg-surface-2 p-6 flex flex-col gap-3">
+              <TextBlock variant="caption">LEARNINGS</TextBlock>
+              <ul class="list-disc pl-5 flex flex-col gap-2 text-[14px] leading-[1.5] text-ink-2">
+                {auditLearnings.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
 
-  <SiteFooter variant="case-study" />
-</BaseLayout>
+    <!-- ─────────── Competitive Analysis ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="flex flex-col gap-6 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">Competitive Analysis</TextBlock>
+          </div>
+          <div class="md:flex-1 flex flex-col gap-6">
+            <TextBlock variant="body">
+              Studied the competitor App Siren, the key findings were:
+            </TextBlock>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+              {sirenScreens.map((screen) => (
+                <div class="flex flex-col gap-3 items-center">
+                  <div class="w-full overflow-hidden rounded-2xl bg-grey-200 border border-divider">
+                    <img
+                      src={screen.img}
+                      alt={screen.alt}
+                      class="block h-auto w-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                  <p class="text-[12px] leading-[1.5] text-[#5a5a5a] text-center">
+                    {screen.caption}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <div class="rounded-2xl bg-surface-2 p-6 flex flex-col gap-3">
+              <TextBlock variant="caption">LEARNINGS</TextBlock>
+              <ul class="list-disc pl-5 flex flex-col gap-2 text-[14px] leading-[1.5] text-ink-2">
+                {sirenLearnings.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── FTUE ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="flex flex-col gap-6 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">FTUE</TextBlock>
+          </div>
+          <div class="md:flex-1 flex flex-col gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+              {ftueScreens.map((screen) => (
+                <div class="flex flex-col gap-3 items-center">
+                  <div class="w-full overflow-hidden rounded-2xl bg-grey-200 border border-divider">
+                    <img
+                      src={screen.img}
+                      alt={screen.alt}
+                      class="block h-auto w-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                  <p class="text-[12px] leading-[1.5] text-[#5a5a5a] text-center">
+                    {screen.caption}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <div class="rounded-2xl bg-surface-2 p-6 flex flex-col gap-3">
+              <TextBlock variant="caption">IMPROVEMENTS</TextBlock>
+              <ul class="list-disc pl-5 flex flex-col gap-2 text-[14px] leading-[1.5] text-ink-2">
+                {ftueImprovements.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── User with score ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="flex flex-col gap-6 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">User with score</TextBlock>
+          </div>
+          <div class="md:flex-1 flex flex-col gap-6">
+            <TextBlock variant="body">
+              Goal: Quick overview of their security status and continuous monitoring.
+            </TextBlock>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+              {scoreScreens.map((screen) => (
+                <div class="flex flex-col gap-3 items-center">
+                  <div class="w-full overflow-hidden rounded-2xl bg-grey-200 border border-divider">
+                    <img
+                      src={screen.img}
+                      alt={screen.alt}
+                      class="block h-auto w-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                  <p class="text-[12px] leading-[1.5] text-[#5a5a5a] text-center">
+                    {screen.caption}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <div class="rounded-2xl bg-surface-2 p-6 flex flex-col gap-3">
+              <TextBlock variant="caption">IMPROVEMENTS</TextBlock>
+              <ul class="list-disc pl-5 flex flex-col gap-2 text-[14px] leading-[1.5] text-ink-2">
+                {scoreImprovements.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Learn experience ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="flex flex-col gap-6 md:flex-row md:gap-8 md:items-start">
+          <div class="md:w-[280px] md:shrink-0">
+            <TextBlock variant="section-title">Learn experience</TextBlock>
+          </div>
+          <div class="md:flex-1 flex flex-col gap-6">
+            <div class="overflow-hidden rounded-2xl bg-grey-200 border border-divider">
+              <img
+                src="/case-studies/cyberboxx/learn-experience.jpg"
+                alt="Learn experience story and interactive scam explorations"
+                class="block h-auto w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+            <div class="rounded-2xl bg-surface-2 p-6 flex flex-col gap-4">
+              <div>
+                <TextBlock variant="caption">SCAM SCENARIOS</TextBlock>
+                <ul class="list-disc pl-5 mt-2 flex flex-col gap-2 text-[14px] leading-[1.5] text-ink-2">
+                  {learnScenarios.map((scenario) => (
+                    <li>{scenario}</li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <TextBlock variant="caption">EXPLORATIONS</TextBlock>
+                <ul class="list-disc pl-5 mt-2 flex flex-col gap-2 text-[14px] leading-[1.5] text-ink-2">
+                  {learnExplorations.map((exp) => (
+                    <li>{exp}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </FadeIn>
+
+    <!-- ─────────── Conclusion ─────────── -->
+    <FadeIn>
+      <section class="px-4 pb-[72px] md:px-[60px]">
+        <div class="flex flex-col gap-3 md:flex
