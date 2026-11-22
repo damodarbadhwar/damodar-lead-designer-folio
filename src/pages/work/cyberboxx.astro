@@ -171,44 +171,44 @@ const scoreImprovements = [
 // — Learn experience individual screens —
 const learnScreens = [
   {
+    img: "/case-studies/cyberboxx/learn-otp-scam.png",
+    alt: "OTP scam screen",
+    caption: "OTP scam",
+  },  
+  {
     img: "/case-studies/cyberboxx/learn-fake-arrest.png",
     alt: "Fake arrest scam screen",
-    caption: "Fake arrest scam",
+    caption: "Audio Quiz",
   },
   {
     img: "/case-studies/cyberboxx/learn-fake-arrest-2.png",
     alt: "Fake arrest scam screen variant 2",
-    caption: "Fake arrest scam — 2",
+    caption: "Mock fake arrest",
   },
   {
-    img: "/case-studies/cyberboxx/learn-fake-arr...teractive.png",
+    img: "/case-studies/cyberboxx/learn-fake-arrest-iteractive.png",
     alt: "Fake arrest scam interactive screen",
-    caption: "Fake arrest interactive",
-  },
-  {
-    img: "/case-studies/cyberboxx/learn-otp-scam.png",
-    alt: "OTP scam screen",
-    caption: "OTP scam",
-  },
-  {
-    img: "/case-studies/cyberboxx/learn-poll.png",
-    alt: "Learn poll screen",
-    caption: "Poll",
-  },
-  {
-    img: "/case-studies/cyberboxx/learn-red-flag.png",
-    alt: "Spot the Red Flag(s) screen",
-    caption: "Spot the Red Flag(s)",
+    caption: "Mock fake arrest interaction",
   },
   {
     img: "/case-studies/cyberboxx/learn-story.png",
     alt: "Learn story screen",
-    caption: "Story",
+    caption: "Comic-styled-stories",
+  },
+  {
+    img: "/case-studies/cyberboxx/learn-red-flag.png",
+    alt: "Spot the Red Flag(s) screen",
+    caption: "MCQ",
   },
   {
     img: "/case-studies/cyberboxx/learn-vernac.png",
     alt: "Vernacular scam learning screen",
     caption: "Vernacular",
+  },
+  {
+    img: "/case-studies/cyberboxx/learn-poll.png",
+    alt: "Learn poll screen",
+    caption: "Poll",
   },
 ];
 
@@ -536,7 +536,7 @@ const learnExplorations = [
       </section>
     </FadeIn>
 
-    <!-- ─────────── FTUE (images on next line, Learnings in 3rd col / wrapped on mobile) ─────────── -->
+    <!-- ─────────── FTUE (images on next line, sticky Improvements card in 3rd col) ─────────── -->
     <FadeIn>
       <section class="px-4 pb-[72px] md:px-[60px]">
         <div class="flex flex-col gap-6">
@@ -562,9 +562,8 @@ const learnExplorations = [
                 </p>
               </div>
             ))}
-            <div class="rounded-2xl bg-surface-2 p-6 flex flex-col gap-3">
+            <div class="rounded-2xl bg-surface-2 p-6 flex flex-col gap-3 md:sticky md:top-6">
               <TextBlock variant="caption">IMPROVEMENTS</TextBlock>
-              <p class="text-[14px] font-medium leading-[1.5] text-ink-2">Learnings:</p>
               <ul class="list-disc pl-5 flex flex-col gap-2 text-[14px] leading-[1.5] text-ink-2">
                 {ftueImprovements.map((item) => (
                   <li>{item}</li>
@@ -576,7 +575,7 @@ const learnExplorations = [
       </section>
     </FadeIn>
 
-    <!-- ─────────── User with score (description on 2nd line, matching gap-3 spacing) ─────────── -->
+    <!-- ─────────── User with score (images on next line, sticky Improvements card in 3rd col) ─────────── -->
     <FadeIn>
       <section class="px-4 pb-[72px] md:px-[60px]">
         <div class="flex flex-col gap-6">
@@ -602,9 +601,8 @@ const learnExplorations = [
                 </p>
               </div>
             ))}
-            <div class="rounded-2xl bg-surface-2 p-6 flex flex-col gap-3">
+            <div class="rounded-2xl bg-surface-2 p-6 flex flex-col gap-3 md:sticky md:top-6">
               <TextBlock variant="caption">IMPROVEMENTS</TextBlock>
-              <p class="text-[14px] font-medium leading-[1.5] text-ink-2">Learnings:</p>
               <ul class="list-disc pl-5 flex flex-col gap-2 text-[14px] leading-[1.5] text-ink-2">
                 {scoreImprovements.map((item) => (
                   <li>{item}</li>
