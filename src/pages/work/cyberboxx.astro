@@ -497,34 +497,32 @@ const learnExplorations = [
       </section>
     </FadeIn>
 
-<!-- ─────────── Competitive Analysis ─────────── -->
+<!-- ─────────── Competitive Analysis (3 images + Learnings in one row on desktop) ─────────── -->
     <FadeIn>
       <section class="px-4 pb-[72px] md:px-[60px]">
-        <div class="flex flex-col gap-6 md:flex-row md:gap-8 md:items-start">
-          <div class="md:w-[280px] md:shrink-0">
+        <div class="flex flex-col gap-6">
+          <div class="flex flex-col gap-3">
             <TextBlock variant="section-title">Competitive Analysis</TextBlock>
-          </div>
-          <div class="md:flex-1 flex flex-col gap-6">
             <TextBlock variant="body">
               Studied the competitor App Siren, the key findings were:
             </TextBlock>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-              {sirenScreens.map((screen) => (
-                <div class="flex flex-col gap-3 items-center">
-                  <div class="w-full overflow-hidden rounded-2xl bg-grey-200 border border-divider">
-                    <img
-                      src={screen.img}
-                      alt={screen.alt}
-                      class="block h-auto w-full object-cover"
-                      loading="lazy"
-                    />
-                  </div>
-                  <p class="text-[12px] leading-[1.5] text-[#5a5a5a] text-center">
-                    {screen.caption}
-                  </p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 items-start">
+            {sirenScreens.map((screen) => (
+              <div class="flex flex-col gap-3 items-center">
+                <div class="w-full overflow-hidden rounded-2xl bg-grey-200 border border-divider">
+                  <img
+                    src={screen.img}
+                    alt={screen.alt}
+                    class="block h-auto w-full object-cover"
+                    loading="lazy"
+                  />
                 </div>
-              ))}
-            </div>
+                <p class="text-[12px] leading-[1.5] text-[#5a5a5a] text-center">
+                  {screen.caption}
+                </p>
+              </div>
+            ))}
             <div class="rounded-2xl bg-surface-2 p-6 flex flex-col gap-3">
               <TextBlock variant="caption">LEARNINGS</TextBlock>
               <ul class="list-disc pl-5 flex flex-col gap-2 text-[14px] leading-[1.5] text-ink-2">
@@ -618,77 +616,52 @@ const learnExplorations = [
       </section>
     </FadeIn>
 
-    <!-- ─────────── Learn experience ─────────── -->
+    <!-- ─────────── Learn experience (images on next row, learning card removed) ─────────── -->
     <FadeIn>
       <section class="px-4 pb-[72px] md:px-[60px]">
-        <div class="flex flex-col gap-6 md:flex-row md:gap-8 md:items-start">
-          <div class="md:w-[280px] md:shrink-0">
+        <div class="flex flex-col gap-6">
+          <div class="flex flex-col gap-3">
             <TextBlock variant="section-title">Learn experience</TextBlock>
           </div>
-          <div class="md:flex-1 flex flex-col gap-6">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-              {learnScreens.map((screen) => (
-                <div class="flex flex-col gap-3 items-center">
-                  <div class="w-full overflow-hidden rounded-2xl bg-grey-200 border border-divider">
-                    <img
-                      src={screen.img}
-                      alt={screen.alt}
-                      class="block h-auto w-full object-cover"
-                      loading="lazy"
-                    />
-                  </div>
-                  <p class="text-[12px] leading-[1.5] text-[#5a5a5a] text-center">
-                    {screen.caption}
-                  </p>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 items-start">
+            {learnScreens.map((screen) => (
+              <div class="flex flex-col gap-3 items-center">
+                <div class="w-full overflow-hidden rounded-2xl bg-grey-200 border border-divider">
+                  <img
+                    src={screen.img}
+                    alt={screen.alt}
+                    class="block h-auto w-full object-cover"
+                    loading="lazy"
+                  />
                 </div>
-              ))}
-            </div>
-            <div class="rounded-2xl bg-surface-2 p-6 flex flex-col gap-3">
-              <TextBlock variant="caption">SCAM SCENARIOS</TextBlock>
-              <ul class="list-disc pl-5 flex flex-col gap-2 text-[14px] leading-[1.5] text-ink-2">
-                {learnScenarios.map((scenario) => (
-                  <li>{scenario}</li>
-                ))}
-              </ul>
-            </div>
+                <p class="text-[12px] leading-[1.5] text-[#5a5a5a] text-center">
+                  {screen.caption}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
     </FadeIn>
 
-    <!-- ─────────── Explorations ─────────── -->
+    <!-- ─────────── Explorations (images on next row, learning card & captions removed) ─────────── -->
     <FadeIn>
       <section class="px-4 pb-[72px] md:px-[60px]">
-        <div class="flex flex-col gap-6 md:flex-row md:gap-8 md:items-start">
-          <div class="md:w-[280px] md:shrink-0">
+        <div class="flex flex-col gap-6">
+          <div class="flex flex-col gap-3">
             <TextBlock variant="section-title">Explorations</TextBlock>
           </div>
-          <div class="md:flex-1 flex flex-col gap-6">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-              {explorationScreens.map((screen) => (
-                <div class="flex flex-col gap-3 items-center">
-                  <div class="w-full overflow-hidden rounded-2xl bg-grey-200 border border-divider">
-                    <img
-                      src={screen.img}
-                      alt={screen.alt}
-                      class="block h-auto w-full object-cover"
-                      loading="lazy"
-                    />
-                  </div>
-                  <p class="text-[12px] leading-[1.5] text-[#5a5a5a] text-center">
-                    {screen.caption}
-                  </p>
-                </div>
-              ))}
-            </div>
-            <div class="rounded-2xl bg-surface-2 p-6 flex flex-col gap-3">
-              <TextBlock variant="caption">EXPLORATIONS</TextBlock>
-              <ul class="list-disc pl-5 flex flex-col gap-2 text-[14px] leading-[1.5] text-ink-2">
-                {learnExplorations.map((exp) => (
-                  <li>{exp}</li>
-                ))}
-              </ul>
-            </div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 items-start">
+            {explorationScreens.map((screen) => (
+              <div class="w-full overflow-hidden rounded-2xl bg-grey-200 border border-divider">
+                <img
+                  src={screen.img}
+                  alt={screen.alt}
+                  class="block h-auto w-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -712,9 +685,9 @@ const learnExplorations = [
 
     </div>
 
-    <!-- ─────────── End of project / Thank you ─────────── -->
+    <!-- ─────────── End of project / Thank you (full-bleed, no corner radius) ─────────── -->
     <FadeIn>
-      <section class="bg-surface-2 flex items-center justify-center gap-6 py-10 mx-4 md:mx-[60px] rounded-2xl">
+      <section class="w-full bg-surface-2 flex items-center justify-center gap-6 py-10 px-4 md:px-[60px]">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
           <path d="M8 0L9.5 6.5L16 8L9.5 9.5L8 16L6.5 9.5L0 8L6.5 6.5L8 0Z" fill="#454545"/>
         </svg>
