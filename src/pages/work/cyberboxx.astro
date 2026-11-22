@@ -461,34 +461,29 @@ const learnExplorations = [
 
     <div class="mx-auto w-full max-w-[1280px]">
 
-    <!-- ─────────── Existing product Audit (images + learnings in 2nd row) ─────────── -->
+    <!-- ─────────── Existing product Audit (3 images + Learnings in one row on desktop) ─────────── -->
     <FadeIn>
       <section class="px-4 pb-[72px] md:px-[60px]">
         <div class="flex flex-col gap-6">
-          <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
-            <div class="md:w-[280px] md:shrink-0">
-              <TextBlock variant="section-title">Existing product Audit</TextBlock>
-            </div>
-            <div class="md:flex-1" />
+          <div class="flex flex-col gap-3">
+            <TextBlock variant="section-title" class="md:whitespace-nowrap">Existing product Audit</TextBlock>
           </div>
-          <div class="flex flex-col gap-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-              {auditScreens.map((screen) => (
-                <div class="flex flex-col gap-3 items-center">
-                  <div class="w-full overflow-hidden rounded-2xl bg-grey-200 border border-divider">
-                    <img
-                      src={screen.img}
-                      alt={screen.alt}
-                      class="block h-auto w-full object-cover"
-                      loading="lazy"
-                    />
-                  </div>
-                  <p class="text-[12px] leading-[1.5] text-[#5a5a5a] text-center">
-                    {screen.caption}
-                  </p>
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 items-start">
+            {auditScreens.map((screen) => (
+              <div class="flex flex-col gap-3 items-center">
+                <div class="w-full overflow-hidden rounded-2xl bg-grey-200 border border-divider">
+                  <img
+                    src={screen.img}
+                    alt={screen.alt}
+                    class="block h-auto w-full object-cover"
+                    loading="lazy"
+                  />
                 </div>
-              ))}
-            </div>
+                <p class="text-[12px] leading-[1.5] text-[#5a5a5a] text-center">
+                  {screen.caption}
+                </p>
+              </div>
+            ))}
             <div class="rounded-2xl bg-surface-2 p-6 flex flex-col gap-3">
               <TextBlock variant="caption">LEARNINGS</TextBlock>
               <ul class="list-disc pl-5 flex flex-col gap-2 text-[14px] leading-[1.5] text-ink-2">
@@ -502,7 +497,7 @@ const learnExplorations = [
       </section>
     </FadeIn>
 
-    <!-- ─────────── Competitive Analysis ─────────── -->
+<!-- ─────────── Competitive Analysis ─────────── -->
     <FadeIn>
       <section class="px-4 pb-[72px] md:px-[60px]">
         <div class="flex flex-col gap-6 md:flex-row md:gap-8 md:items-start">
