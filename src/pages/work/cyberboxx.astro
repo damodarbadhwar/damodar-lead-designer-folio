@@ -72,7 +72,7 @@ const userPersonas = [
   },
   {
     name: "Sandeep Verma, 36",
-    role: "Tier-3 worker",
+    role: "Banker in a tier-3 city",
     img: "/case-studies/cyberboxx/persona-sandeep-verma.png",
     goal: "Avoid costly mistakes online",
     challenge: "Cannot confidently judge whether something is risky",
@@ -384,7 +384,7 @@ const learnExplorations = [
       </section>
     </FadeIn>
 
-    <!-- ─────────── Understanding the Users (4 Persona Cards: 2 rows on mobile, 1 row on desktop) ─────────── -->
+    <!-- ─────────── Understanding the Users (Aligned 4-col desktop / 2-col mobile) ─────────── -->
     <FadeIn>
       <section class="px-4 pb-10 md:px-[60px]">
         <TextBlock variant="section-title" as="h3">Understanding the Users</TextBlock>
@@ -393,10 +393,11 @@ const learnExplorations = [
 
     <FadeIn>
       <section class="px-4 pb-[72px] md:px-[60px]">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-          {userPersonas.map((persona) => (
-            <div class="rounded-2xl border border-divider overflow-hidden bg-white flex flex-col">
-              <div class="p-4 md:p-6 flex flex-col items-center text-center gap-3 border-b border-divider">
+        <div class="rounded-2xl border border-divider bg-[#F4F7FA] overflow-hidden">
+          <div class="grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-divider">
+            {userPersonas.map((persona) => (
+              <div class="p-4 md:p-6 grid grid-rows-[auto_auto_1fr_1fr_1fr] gap-y-5 border-b md:border-b-0 border-divider">
+                <!-- Portrait -->
                 <div class="rounded-xl overflow-hidden bg-grey-200 size-16 md:size-20 shrink-0">
                   <img
                     src={persona.img}
@@ -405,47 +406,53 @@ const learnExplorations = [
                     loading="lazy"
                   />
                 </div>
+
+                <!-- Name + Role -->
                 <div class="flex flex-col gap-1">
-                  <TextBlock variant="caption">{persona.role}</TextBlock>
                   <h4 class="text-[20px] font-medium leading-[1.4] text-ink-2">{persona.name}</h4>
+                  <TextBlock variant="body">{persona.role}</TextBlock>
                 </div>
-              </div>
-              <div class="bg-surface-2 p-4 md:p-6 flex-1 flex flex-col gap-4">
-                <div>
+
+                <!-- Goal (aligned row across all columns) -->
+                <div class="flex flex-col gap-1.5">
                   <TextBlock variant="caption">GOAL</TextBlock>
-                  <ul class="list-disc pl-5 mt-2 flex flex-col gap-2 text-[14px] leading-[1.5] text-ink-2">
-                    <li>{persona.goal}</li>
-                  </ul>
+                  <p class="text-[14px] leading-[1.5] text-ink-2">
+                    {persona.goal}
+                  </p>
                 </div>
-                <div>
+
+                <!-- Challenge (aligned row across all columns) -->
+                <div class="flex flex-col gap-1.5">
                   <TextBlock variant="caption">CHALLENGE</TextBlock>
-                  <ul class="list-disc pl-5 mt-2 flex flex-col gap-2 text-[14px] leading-[1.5] text-ink-2">
-                    <li>{persona.challenge}</li>
-                  </ul>
+                  <p class="text-[14px] leading-[1.5] text-ink-2">
+                    {persona.challenge}
+                  </p>
                 </div>
-                <div>
+
+                <!-- Design opportunity (aligned row across all columns) -->
+                <div class="flex flex-col gap-1.5">
                   <TextBlock variant="caption">DESIGN OPPORTUNITY</TextBlock>
-                  <ul class="list-disc pl-5 mt-2 flex flex-col gap-2 text-[14px] leading-[1.5] text-ink-2">
-                    <li>{persona.opportunity}</li>
-                  </ul>
+                  <p class="text-[14px] leading-[1.5] text-ink-2">
+                    {persona.opportunity}
+                  </p>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
     </FadeIn>
 
     </div>
 
-    <!-- ─────────── CORE USER NEED (full-bleed, no padding, #2D2D39 surface, white text) ─────────── -->
+    <!-- ─────────── CORE USER NEED (full-bleed, no padding, #2D2D39 surface, centered white text) ─────────── -->
     <FadeIn>
       <section class="w-full px-0 pb-[72px]">
         <div class="w-full bg-[#2D2D39] text-white py-10 px-4 md:px-[60px]">
-          <div class="mx-auto w-full max-w-[1280px] flex flex-col gap-2 text-white">
-            <TextBlock variant="caption" class="text-white">CORE USER NEED</TextBlock>
-            <TextBlock variant="body-lg" class="text-white">
-              A fraud safety companion: something that speaks their language, tells them if they're safe, and guides them when they're not.
+          <div class="mx-auto w-full max-w-[1280px] flex flex-col items-center text-center gap-3 text-white">
+            <TextBlock variant="section-title" as="h3" class="text-white text-center">Core user need</TextBlock>
+            <TextBlock variant="body-lg" class="text-white text-center max-w-[760px]">
+              A fraud safety companion: Something that speaks their language, tells them if they're safe, and guides them when they're not.
             </TextBlock>
           </div>
         </div>
@@ -454,14 +461,17 @@ const learnExplorations = [
 
     <div class="mx-auto w-full max-w-[1280px]">
 
-    <!-- ─────────── Existing product Audit ─────────── -->
+    <!-- ─────────── Existing product Audit (images + learnings in 2nd row) ─────────── -->
     <FadeIn>
       <section class="px-4 pb-[72px] md:px-[60px]">
-        <div class="flex flex-col gap-6 md:flex-row md:gap-8 md:items-start">
-          <div class="md:w-[280px] md:shrink-0">
-            <TextBlock variant="section-title">Existing product Audit</TextBlock>
+        <div class="flex flex-col gap-6">
+          <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
+            <div class="md:w-[280px] md:shrink-0">
+              <TextBlock variant="section-title">Existing product Audit</TextBlock>
+            </div>
+            <div class="md:flex-1" />
           </div>
-          <div class="md:flex-1 flex flex-col gap-6">
+          <div class="flex flex-col gap-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
               {auditScreens.map((screen) => (
                 <div class="flex flex-col gap-3 items-center">
@@ -573,19 +583,15 @@ const learnExplorations = [
       </section>
     </FadeIn>
 
-    <!-- ─────────── User with score (images on next line, Learnings in 3rd col / wrapped on mobile) ─────────── -->
+    <!-- ─────────── User with score (description on 2nd line, matching gap-3 spacing) ─────────── -->
     <FadeIn>
       <section class="px-4 pb-[72px] md:px-[60px]">
         <div class="flex flex-col gap-6">
-          <div class="flex flex-col gap-3 md:flex-row md:gap-8 md:items-start">
-            <div class="md:w-[280px] md:shrink-0">
-              <TextBlock variant="section-title">User with score</TextBlock>
-            </div>
-            <div class="md:flex-1">
-              <TextBlock variant="body">
-                Goal: Quick overview of their security status and continuous monitoring.
-              </TextBlock>
-            </div>
+          <div class="flex flex-col gap-3">
+            <TextBlock variant="section-title">User with score</TextBlock>
+            <TextBlock variant="body">
+              Goal: Quick overview of their security status and continuous monitoring.
+            </TextBlock>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 items-start">
             {scoreScreens.map((screen) => (
